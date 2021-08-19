@@ -10,7 +10,4 @@
     <issue id="SelectableText" severity="ignore" />
     <issue id="UnusedIds" severity="informational" />
     <issue id="UnusedResources" severity="informational" />
-
-    <!-- TODO: Remove once we restore support for Android API < 26 -->
-    <issue id="ObsoleteSdkInt" severity="informational" />
 </lint>
