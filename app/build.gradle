@@ -144,7 +144,7 @@ dependencies {
 
     // Lists
     implementation "com.airbnb.android:epoxy:4.5.0"
-    kapt "com.airbnb.android:epoxy-processor:4.4.4"
+    kapt "com.airbnb.android:epoxy-processor:4.6.3-vinay-compose"
 
     // FAB Speed Dial
     implementation "com.leinardi.android:speed-dial:3.2.0"
