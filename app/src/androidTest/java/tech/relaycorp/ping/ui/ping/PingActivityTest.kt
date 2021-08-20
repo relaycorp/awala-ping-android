@@ -3,10 +3,10 @@ package tech.relaycorp.ping.ui.ping
 import android.content.ClipboardManager
 import android.content.Context
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.schibsted.spain.barista.assertion.BaristaContentDescriptionAssertions.assertContentDescription
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.assertion.BaristaContentDescriptionAssertions.assertContentDescription
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals

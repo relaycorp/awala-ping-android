@@ -1,8 +1,8 @@
 package tech.relaycorp.ping.ui.main
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.schibsted.spain.barista.assertion.BaristaContentDescriptionAssertions.assertContentDescription
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.assertion.BaristaContentDescriptionAssertions.assertContentDescription
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule

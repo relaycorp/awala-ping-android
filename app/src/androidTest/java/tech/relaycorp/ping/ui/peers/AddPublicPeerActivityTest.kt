@@ -7,11 +7,11 @@ import android.net.Uri
 import androidx.test.espresso.intent.Intents.intending
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.interaction.BaristaClickInteractions.clickOn
-import com.schibsted.spain.barista.interaction.BaristaEditTextInteractions.writeTo
-import com.schibsted.spain.barista.rule.flaky.AllowFlaky
-import com.schibsted.spain.barista.rule.flaky.FlakyTestRule
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
+import com.adevinta.android.barista.rule.flaky.FlakyTestRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test

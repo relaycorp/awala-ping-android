@@ -1,8 +1,8 @@
 package tech.relaycorp.ping.ui.peers
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.schibsted.spain.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
-import com.schibsted.spain.barista.rule.flaky.AllowFlaky
+import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
