@@ -4,18 +4,17 @@ spec:
   test: app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
   timeout: 30m
   device:
-# TODO: Test on Android API < 26 once we restore support for it.
-#    # Asus Nexus 7 (physical). The oldest device we're testing.
-#    - model: flo
-#      version: 21   # Android 5.0
-#      locale: en
-#      orientation: portrait
-#
-#    # Nexus 5X (virtual)
-#    - model: Nexus5X
-#      version: 24   # Android 7.0
-#      locale: en
-#      orientation: portrait
+    # Asus Nexus 7 (physical). The oldest device we're testing.
+    - model: flo
+      version: 21   # Android 5.0
+      locale: en
+      orientation: portrait
+
+    # Nexus 5X (virtual)
+    - model: Nexus5X
+      version: 24   # Android 7.0
+      locale: en
+      orientation: portrait
 
     # Nexus 5X (virtual)
     - model: Nexus5X
