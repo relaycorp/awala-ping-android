@@ -44,7 +44,7 @@ open class App : Application() {
     }
 
     protected open suspend fun setupAwala() {
-        Awala.setup(this)
+        Awala.setUp(this)
         try {
             GatewayClient.bind()
             bootstrapData.bootstrapIfNeeded()

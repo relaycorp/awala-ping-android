@@ -19,7 +19,7 @@ This app only stores cryptographically-generated data whose inputs are not deriv
 This app only communicates with the following:
 
 - The [private gateway](https://play.google.com/store/apps/details?id=tech.relaycorp.gateway) via awaladroid.
-- Any public endpoint that the user sends pings to. By default, the Relaycorp-operated public endpoint at `ping.awala.services` is used.
+- Any public endpoint that the user sends pings to. By default, the Relaycorp-operated public endpoint at `ping.awala.services` is used ([connection parameters file](https://pong-pohttp.awala.services/connection-params.der)).
 
 This app doesn't track usage (for example, using Google Analytics), nor does it use ads.
 
