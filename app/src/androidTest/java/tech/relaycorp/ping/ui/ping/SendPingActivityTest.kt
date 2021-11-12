@@ -5,6 +5,7 @@ import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertDis
 import com.adevinta.android.barista.assertion.BaristaEnabledAssertions.assertEnabled
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
 import org.junit.Rule
@@ -51,6 +52,7 @@ class SendPingActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 3)
     fun picksDefaultPeer() {
         val peer = PublicPeerEntityFactory.build()
         runBlocking {

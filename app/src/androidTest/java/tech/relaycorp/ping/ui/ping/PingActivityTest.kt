@@ -7,6 +7,7 @@ import com.adevinta.android.barista.assertion.BaristaContentDescriptionAssertion
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
+import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
@@ -64,6 +65,7 @@ class PingActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 3)
     fun displaysPingWithPong() {
         val peer = PublicPeerEntityFactory.build()
         val ping = PingEntityFactory.build(peer).copy(
