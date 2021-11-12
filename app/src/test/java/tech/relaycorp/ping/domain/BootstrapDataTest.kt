@@ -41,7 +41,7 @@ class BootstrapDataTest {
 
         subject.bootstrapIfNeeded()
 
-        verify(addPublicPeer).add(eq("ping.awala.services"), any())
+        verify(addPublicPeer).add(any())
         verify(registerFirstPartyEndpoint).register()
         verify(appPreferences).setFirstPartyEndpointAddress(eq(firstPartyAddress))
     }
