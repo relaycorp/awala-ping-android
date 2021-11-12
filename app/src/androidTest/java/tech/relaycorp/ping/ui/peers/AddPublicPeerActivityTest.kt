@@ -9,7 +9,6 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
-import com.adevinta.android.barista.interaction.BaristaEditTextInteractions.writeTo
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.adevinta.android.barista.rule.flaky.FlakyTestRule
 import org.junit.Before
@@ -46,24 +45,20 @@ class AddPublicPeerActivityTest {
         clickOn(R.id.addPeer)
         clickOn(R.string.peer_public)
 
-        val address = "ping.awala.services"
-        writeTo(R.id.addressEdit, address)
-
         intending(hasAction(Intent.ACTION_OPEN_DOCUMENT))
             .respondWith(
                 Instrumentation.ActivityResult(
                     Activity.RESULT_OK,
                     Intent().setData(
-                        Uri.parse("android.resource://${context.packageName}/${R.raw.ping_awala_identity}")
+                        Uri.parse("android.resource://${context.packageName}/${R.raw.default_public_peer_connection_params}")
                     )
                 )
             )
-        clickOn(R.string.peer_certificate_button)
+        clickOn(R.string.peer_conn_params_file_button)
 
         clickOn(R.id.save)
 
         waitForCurrentActivityToBe(PeersActivity::class)
-        assertDisplayed(address)
     }
 
     @Test
@@ -73,10 +68,7 @@ class AddPublicPeerActivityTest {
         clickOn(R.id.addPeer)
         clickOn(R.string.peer_public)
 
-        val address = "ping.awala.services"
-        writeTo(R.id.addressEdit, address)
-
         clickOn(R.id.save)
-        assertDisplayed(R.string.peer_add_missing_certificate)
+        assertDisplayed(R.string.peer_add_missing_conn_params_file)
     }
 }

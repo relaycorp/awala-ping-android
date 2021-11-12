@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.onEach
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.common.di.ViewModelFactory
 import tech.relaycorp.ping.ui.BaseActivity
-import tech.relaycorp.ping.ui.common.SimpleTextWatcher
 import javax.inject.Inject
 
 class AddPublicPeerActivity : BaseActivity() {
@@ -40,26 +39,23 @@ class AddPublicPeerActivity : BaseActivity() {
             true
         }
 
-        addressEdit.addTextChangedListener(SimpleTextWatcher {
-            viewModel.aliasChanged(it)
-        })
-        certificateButton.setOnClickListener {
+        connectionParamsButton.setOnClickListener {
             openFileDialog()
         }
-        certificateClear.setOnClickListener {
-            viewModel.removeCertificateClicked()
+        connectionParamsClear.setOnClickListener {
+            viewModel.removeConnectionParamsFileClicked()
         }
 
         viewModel
-            .certificate()
+            .connectionParamsFile()
             .onEach {
-                val hasCertificate = it.isPresent
-                certificateButton.isVisible = !hasCertificate
-                certificateName.isVisible = hasCertificate
-                certificateName.text = if (hasCertificate) {
-                    it.get().ifBlank { getString(R.string.peer_certificate_picked) }
+                val hasConnectionParams = it.isPresent
+                connectionParamsButton.isVisible = !hasConnectionParams
+                connectionParamsName.isVisible = hasConnectionParams
+                connectionParamsName.text = if (hasConnectionParams) {
+                    it.get().ifBlank { getString(R.string.peer_conn_params_file_picked) }
                 } else ""
-                certificateClear.isVisible = hasCertificate
+                connectionParamsClear.isVisible = hasConnectionParams
             }
             .launchIn(lifecycleScope)
 
@@ -75,8 +71,8 @@ class AddPublicPeerActivity : BaseActivity() {
 
         results
             .onEach {
-                if (it.requestCode == PICK_CERTIFICATE && it.resultCode == Activity.RESULT_OK) {
-                    it.data?.data?.let { uri -> viewModel.certificatePicked(uri) }
+                if (it.requestCode == PICK_CONNECTION_PARAMS && it.resultCode == Activity.RESULT_OK) {
+                    it.data?.data?.let { uri -> viewModel.connectionParamsFilePicked(uri) }
                 }
             }
             .launchIn(lifecycleScope)
@@ -87,19 +83,17 @@ class AddPublicPeerActivity : BaseActivity() {
             Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
                 type = "*/*"
             },
-            PICK_CERTIFICATE
+            PICK_CONNECTION_PARAMS
         )
     }
 
     private fun showError(error: AddPublicPeerViewModel.Error) {
         messageManager.showError(
             when (error) {
-                AddPublicPeerViewModel.Error.InvalidAddress ->
-                    R.string.peer_add_invalid_address
-                AddPublicPeerViewModel.Error.MissingCertificate ->
-                    R.string.peer_add_missing_certificate
-                AddPublicPeerViewModel.Error.InvalidCertificate ->
-                    R.string.peer_add_invalid_certificate
+                AddPublicPeerViewModel.Error.MissingConnectionParams ->
+                    R.string.peer_add_missing_conn_params_file
+                AddPublicPeerViewModel.Error.InvalidConnectionParams ->
+                    R.string.peer_add_invalid_conn_params_file
                 AddPublicPeerViewModel.Error.GenericSave ->
                     R.string.peer_add_error
             }
@@ -107,7 +101,7 @@ class AddPublicPeerActivity : BaseActivity() {
     }
 
     companion object {
-        private const val PICK_CERTIFICATE = 11
+        private const val PICK_CONNECTION_PARAMS = 11
 
         fun getIntent(context: Context) = Intent(context, AddPublicPeerActivity::class.java)
     }

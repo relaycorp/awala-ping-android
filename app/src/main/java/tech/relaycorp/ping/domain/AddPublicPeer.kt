@@ -11,12 +11,12 @@ class AddPublicPeer
     private val publicPeerDao: PublicPeerDao
 ) {
 
-    @Throws(InvalidIdentityCertificate::class)
-    suspend fun add(address: String, identity: ByteArray): PublicThirdPartyEndpoint {
+    @Throws(InvalidConnectionParams::class)
+    suspend fun add(connectionParams: ByteArray): PublicThirdPartyEndpoint {
         val endpoint = try {
-            PublicThirdPartyEndpoint.import(address, identity)
+            PublicThirdPartyEndpoint.import(connectionParams)
         } catch (e: InvalidThirdPartyEndpoint) {
-            throw InvalidIdentityCertificate(e)
+            throw InvalidConnectionParams(e)
         }
         publicPeerDao.save(
             PublicPeerEntity(
@@ -28,4 +28,4 @@ class AddPublicPeer
     }
 }
 
-class InvalidIdentityCertificate(cause: Throwable) : Exception(cause)
+class InvalidConnectionParams(cause: Throwable) : Exception(cause)

@@ -15,6 +15,6 @@ open class TestApp : App() {
     }
 
     override suspend fun setupAwala() {
-        Awala.setup(this)
+        Awala.setUp(this)
     }
 }

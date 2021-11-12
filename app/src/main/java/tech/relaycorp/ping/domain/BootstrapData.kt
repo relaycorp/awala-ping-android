@@ -25,8 +25,9 @@ class BootstrapData
 
     private suspend fun importDefaultPublicPeer() {
         addPublicPeer.add(
-            "ping.awala.services",
-            resources.openRawResource(R.raw.ping_awala_identity).use { it.readBytes() }
+            resources.openRawResource(R.raw.default_public_peer_connection_params).use {
+                it.readBytes()
+            }
         )
     }
 }
