@@ -40,6 +40,7 @@ class AddPublicPeerActivityTest {
     }
 
     @Test
+    @AllowFlaky(attempts = 3)
     fun addPublicPeerSuccessfully() {
         testRule.start()
         clickOn(R.id.addPeer)
