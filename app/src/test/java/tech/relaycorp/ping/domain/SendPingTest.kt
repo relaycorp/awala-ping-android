@@ -6,7 +6,6 @@ import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import tech.relaycorp.awaladroid.endpoint.AuthorizationBundle
 import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.PublicThirdPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.ThirdPartyEndpoint
@@ -17,6 +16,7 @@ import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.domain.model.Peer
 import tech.relaycorp.ping.domain.model.PeerType
 import tech.relaycorp.ping.test.PublicPeerEntityFactory
+import tech.relaycorp.relaynet.pki.CertificationPath
 import tech.relaycorp.relaynet.testing.pki.KeyPairSet
 import tech.relaycorp.relaynet.testing.pki.PDACertPath
 import tech.relaycorp.relaynet.wrappers.privateAddress
@@ -53,14 +53,14 @@ class SendPingTest {
         whenever(publicThirdPartyEndpointLoad.load(any())).thenReturn(recipient)
 
         whenever(sender.issueAuthorization(any<ThirdPartyEndpoint>(), any())).thenReturn(
-            AuthorizationBundle(
-                PDACertPath.PRIVATE_GW.serialize(),
+            CertificationPath(
+                PDACertPath.PRIVATE_GW,
                 emptyList()
-            )
+            ).serialize()
         )
 
         val pingMessageSerialized = ByteArray(0)
-        whenever(pingSerialization.serialize(any(), any(), any()))
+        whenever(pingSerialization.serialize(any(), any()))
             .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()

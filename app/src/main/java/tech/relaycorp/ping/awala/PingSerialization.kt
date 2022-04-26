@@ -11,13 +11,11 @@ class PingSerialization
 
     fun serialize(
         pingId: String,
-        pda: ByteArray,
-        pdaChain: List<ByteArray>
+        pdaPathSerialized: ByteArray,
     ): ByteArray {
         val pingJSON = JSONObject()
         pingJSON.put("id", pingId)
-        pingJSON.put("pda", base64Encode(pda))
-        pingJSON.put("pda_chain", JSONArray(pdaChain.map { base64Encode(it) }))
+        pingJSON.put("pda_path", base64Encode(pdaPathSerialized))
         val pingJSONString = pingJSON.toString()
         return pingJSONString.toByteArray()
     }

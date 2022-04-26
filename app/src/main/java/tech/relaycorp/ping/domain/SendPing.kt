@@ -35,14 +35,13 @@ class SendPing
 
         val pingId = UUID.randomUUID().toString()
         val expiresAt = ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
-        val authorization = sender.issueAuthorization(
+        val pdaPathSerialized = sender.issueAuthorization(
             recipient,
             ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
         )
         val pingMessageSerialized = pingSerialization.serialize(
             pingId,
-            authorization.pdaSerialized,
-            authorization.pdaChainSerialized
+            pdaPathSerialized,
         )
         val outgoingMessage = outgoingMessageBuilder.build(
             AwalaPing.V1.PingType,
