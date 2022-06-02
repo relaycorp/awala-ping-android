@@ -3,17 +3,19 @@
     <!-- We're using dependabot to keep dependencies up-to-date -->
     <issue id="NewerVersionAvailable" severity="ignore" />
     <issue id="GradleDependency" severity="ignore" />
-    <issue id="InvalidPackage" severity="informational" />
     <issue id="LockedOrientationActivity" severity="ignore" />
     <issue id="GoogleAppIndexingWarning" severity="ignore" />
     <issue id="Overdraw" severity="ignore" />
     <issue id="SelectableText" severity="ignore" />
-    <issue id="TrustAllX509TrustManager" severity="informational" />
     <issue id="UnusedIds" severity="informational" />
     <issue id="UnusedResources" severity="informational" />
     <issue id="ConvertToWebp" severity="informational" />
+    <issue id="TrustAllX509TrustManager">
+        <ignore path="**/JcaJceUtils*.class" />
+    </issue>
     <issue id="InvalidPackage">
         <!-- Ignore errors about BC importing javax.naming because we don't use those modules -->
         <ignore path="**/bcpkix-*.jar" />
+        <ignore path="**/kotlinx-coroutines-core-jvm-1.5.2.jar" />
     </issue>
 </lint>
