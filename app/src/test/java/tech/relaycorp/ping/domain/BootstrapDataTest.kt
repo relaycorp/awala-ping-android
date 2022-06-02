@@ -5,6 +5,7 @@ import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
+import org.mockito.Mockito.verifyNoInteractions
 import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.ping.awala.FirstPartyEndpointRegistration
 import tech.relaycorp.ping.data.preference.AppPreferences
@@ -25,8 +26,8 @@ class BootstrapDataTest {
 
         subject.bootstrapIfNeeded()
 
-        verifyZeroInteractions(registerFirstPartyEndpoint)
-        verifyZeroInteractions(addPublicPeer)
+        verifyNoInteractions(registerFirstPartyEndpoint)
+        verifyNoInteractions(addPublicPeer)
         verify(appPreferences, never()).setFirstPartyEndpointAddress(any())
     }
 
