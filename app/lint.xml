@@ -11,11 +11,13 @@
     <issue id="UnusedResources" severity="informational" />
     <issue id="ConvertToWebp" severity="informational" />
     <issue id="TrustAllX509TrustManager">
-        <ignore path="**/JcaJceUtils*.class" />
+        <ignore path="org/bouncycastle/est/jcajce/*.class" />
     </issue>
     <issue id="InvalidPackage">
         <!-- Ignore errors about BC importing javax.naming because we don't use those modules -->
         <ignore path="**/bcpkix-*.jar" />
+        <!-- Temporary until https://github.com/Kotlin/kotlinx.coroutines/issues/3277 / https://github.com/Kotlin/kotlinx.coroutines/issues/2004 is resolved. -->
+        <!--  Ignoring core jvm artifact should be completely safe, actual code with java.lang.instrument is never loaded, and we don't use the JVM version -->
         <ignore path="**/kotlinx-coroutines-core-jvm-1.5.2.jar" />
     </issue>
 </lint>
