@@ -24,13 +24,13 @@ repositories {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 32
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "tech.relaycorp.ping"
         minSdkVersion 21
-        targetSdkVersion 30
+        targetSdkVersion 32
         versionCode 7
         versionName project.findProperty("versionName") ?: "0.7"
         testInstrumentationRunner "tech.relaycorp.ping.test.TestAndroidJUnitRunner"
@@ -115,12 +115,12 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutinesVersion"
 
     // Android
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'com.google.android.material:material:1.4.0'
+    implementation 'androidx.appcompat:appcompat:1.4.1'
+    implementation 'androidx.core:core-ktx:1.7.0'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
     implementation 'androidx.security:security-crypto:1.1.0-alpha03'
 
     // Dependency Injection
@@ -128,28 +128,26 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$daggerVersion"
 
     // Awala
-    implementation 'com.github.relaycorp:awala-endpoint-android:1.10.1'
+    implementation 'com.github.relaycorp:awala-endpoint-android:1.12.3'
 
     // UI
-    implementation 'dev.chrisbanes.insetter:insetter:0.6.0'
+    implementation 'dev.chrisbanes.insetter:insetter:0.6.1'
 
     // Preferences
     implementation 'androidx.preference:preference-ktx:1.1.1'
     implementation 'com.fredporciuncula:flow-preferences:1.5.0'
 
     // Database
-    implementation 'androidx.room:room-runtime:2.3.0'
-    kapt 'androidx.room:room-compiler:2.3.0'
-    implementation 'androidx.room:room-ktx:2.3.0'
-    // Temporary fix for Mac M1 until Room 2.4.0 is released
-    kapt "org.xerial:sqlite-jdbc:3.34.0"
+    implementation 'androidx.room:room-runtime:2.4.2'
+    kapt 'androidx.room:room-compiler:2.4.2'
+    implementation 'androidx.room:room-ktx:2.4.2'
 
     // Lists
     implementation "com.airbnb.android:epoxy:$epoxyVersion"
     kapt "com.airbnb.android:epoxy-processor:$epoxyVersion"
 
     // FAB Speed Dial
-    implementation "com.leinardi.android:speed-dial:3.2.0"
+    implementation "com.leinardi.android:speed-dial:3.3.0"
 
     // Display open-source licenses
     implementation "com.mikepenz:aboutlibraries:$aboutLibrariesVersion"
@@ -158,20 +156,20 @@ dependencies {
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'androidx.test:core:1.4.0'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
-    testImplementation 'org.mockito:mockito-inline:3.11.2'
+    testImplementation 'org.mockito:mockito-inline:4.6.0'
     testImplementation 'com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0'
-    testImplementation 'tech.relaycorp:awala-testing:1.5.1'
-    testImplementation 'org.robolectric:robolectric:4.6.1'
+    testImplementation 'tech.relaycorp:awala-testing:1.5.2'
+    testImplementation 'org.robolectric:robolectric:4.8.1'
 
     // Instrumentation Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinCoroutinesVersion"
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-intents:3.4.0'
-    androidTestImplementation('com.adevinta.android:barista:4.0.0') {
+    androidTestImplementation('com.adevinta.android:barista:4.2.0') {
         exclude group: 'org.jetbrains.kotlin'
     }
-    androidTestImplementation "org.mockito:mockito-android:3.11.2"
+    androidTestImplementation "org.mockito:mockito-android:4.6.0"
     androidTestImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0") {
         // Workaround for Android API < 26:
         // https://github.com/mockito/mockito/pull/2024
