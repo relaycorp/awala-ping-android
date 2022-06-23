@@ -1,6 +1,6 @@
 package tech.relaycorp.ping.ui.ping
 
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import tech.relaycorp.ping.ui.BaseViewModel
@@ -69,7 +69,7 @@ class SendPingViewModel
                     expiresAtChanges.value.toKotlinDuration()
                 )
                 _sending.value = false
-                _finishToPing.sendBlocking(pingId)
+                _finishToPing.trySendBlocking(pingId)
             }
             .catch { exp ->
                 logger.log(Level.WARNING, "Error sending ping", exp)
