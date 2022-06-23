@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import dev.chrisbanes.insetter.applyInsetter
 import kotlinx.android.synthetic.main.common_app_bar.*
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.asFlow
 import tech.relaycorp.ping.ui.common.MessageManager
 import tech.relaycorp.ping.App
@@ -36,7 +36,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        _results.sendBlocking(ActivityResult(requestCode, resultCode, data))
+        _results.trySendBlocking(ActivityResult(requestCode, resultCode, data))
     }
 
     override fun setContentView(layoutResID: Int) {
