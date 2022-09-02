@@ -36,7 +36,7 @@ class BootstrapDataTest {
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(null))
         val firstPartyEndpoint = mock<FirstPartyEndpoint>()
         val firstPartyAddress = "123456"
-        whenever(firstPartyEndpoint.privateAddress).thenReturn(firstPartyAddress)
+        whenever(firstPartyEndpoint.nodeId).thenReturn(firstPartyAddress)
         whenever(registerFirstPartyEndpoint.register()).thenReturn(firstPartyEndpoint)
         whenever(resources.openRawResource(any())).thenReturn(ByteArray(0).inputStream())
 

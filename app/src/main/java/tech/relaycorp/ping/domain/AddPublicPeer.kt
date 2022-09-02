@@ -20,8 +20,8 @@ class AddPublicPeer
         }
         publicPeerDao.save(
             PublicPeerEntity(
-                privateAddress = endpoint.privateAddress,
-                publicAddress = endpoint.publicAddress
+                nodeId = endpoint.nodeId,
+                internetAddress = endpoint.internetAddress
             )
         )
         return endpoint

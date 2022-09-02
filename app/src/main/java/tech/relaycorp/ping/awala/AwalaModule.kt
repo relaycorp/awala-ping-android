@@ -22,15 +22,15 @@ class AwalaModule {
     @Provides
     fun firstPartyEndpointLoad(): FirstPartyEndpointLoad =
         object : FirstPartyEndpointLoad {
-            override suspend fun load(privateAddress: String): FirstPartyEndpoint? =
-                FirstPartyEndpoint.load(privateAddress)
+            override suspend fun load(nodeId: String): FirstPartyEndpoint? =
+                FirstPartyEndpoint.load(nodeId)
         }
 
     @Provides
     fun publicThirdPartyEndpointLoad(): PublicThirdPartyEndpointLoad =
         object : PublicThirdPartyEndpointLoad {
-            override suspend fun load(privateAddress: String): PublicThirdPartyEndpoint? =
-                PublicThirdPartyEndpoint.load(privateAddress)
+            override suspend fun load(nodeId: String): PublicThirdPartyEndpoint? =
+                PublicThirdPartyEndpoint.load(nodeId)
         }
 
     @Provides

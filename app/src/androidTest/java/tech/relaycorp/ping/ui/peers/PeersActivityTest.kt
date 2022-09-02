@@ -41,7 +41,7 @@ class PeersActivityTest {
         testRule.start()
 
         waitFor {
-            assertDisplayed(peer.publicAddress)
+            assertDisplayed(peer.internetAddress)
         }
     }
 }

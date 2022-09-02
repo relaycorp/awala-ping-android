@@ -53,10 +53,10 @@ class PeerActivityTest {
             publicPeerDao.save(peer)
         }
 
-        testRule.start(PeerActivity.getIntent(context, peer.privateAddress))
+        testRule.start(PeerActivity.getIntent(context, peer.nodeId))
 
-        assertDisplayed(peer.publicAddress)
-        assertDisplayed(peer.privateAddress)
+        assertDisplayed(peer.internetAddress)
+        assertDisplayed(peer.nodeId)
     }
 
     @Test
@@ -67,7 +67,7 @@ class PeerActivityTest {
             publicPeerDao.save(peer)
         }
 
-        val activity = testRule.start(PeerActivity.getIntent(context, peer.privateAddress))
+        val activity = testRule.start(PeerActivity.getIntent(context, peer.nodeId))
 
         clickOn(R.id.delete)
         clickOn(R.string.delete)
@@ -76,7 +76,7 @@ class PeerActivityTest {
             assertTrue(activity.isFinishing || activity.isDestroyed)
         }
         suspendWaitFor {
-            assertTrue(publicPeerDao.get(peer.privateAddress).first()!!.deleted)
+            assertTrue(publicPeerDao.get(peer.nodeId).first()!!.deleted)
         }
     }
 }

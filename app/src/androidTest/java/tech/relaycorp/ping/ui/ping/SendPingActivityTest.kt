@@ -46,7 +46,7 @@ class SendPingActivityTest {
         }
 
         clickOn(R.id.toButton)
-        clickOn(peer.publicAddress)
+        clickOn(peer.internetAddress)
 
         assertEnabled(R.id.send)
     }
@@ -61,7 +61,7 @@ class SendPingActivityTest {
 
         testRule.start(SendPingActivity.getIntent(context))
 
-        assertDisplayed(peer.publicAddress)
+        assertDisplayed(peer.internetAddress)
         assertEnabled(R.id.send)
     }
 }

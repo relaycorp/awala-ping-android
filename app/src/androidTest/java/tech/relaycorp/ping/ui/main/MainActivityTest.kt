@@ -47,7 +47,7 @@ class MainActivityTest {
 
         testRule.start()
 
-        assertDisplayed(peer.publicAddress)
+        assertDisplayed(peer.internetAddress)
         assertDisplayed(DateTimeFormat.format(ping.sentAt))
         assertContentDescription(R.id.state, R.string.ping_sent)
     }

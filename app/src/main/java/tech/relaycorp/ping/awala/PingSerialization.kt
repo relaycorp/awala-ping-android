@@ -12,10 +12,14 @@ class PingSerialization
     fun serialize(
         pingId: String,
         pdaPathSerialized: ByteArray,
+        internetAddress: String? = null,
     ): ByteArray {
         val pingJSON = JSONObject()
         pingJSON.put("id", pingId)
         pingJSON.put("pda_path", base64Encode(pdaPathSerialized))
+        internetAddress?.let {
+            pingJSON.put("endpoint_internet_address", it)
+        }
         val pingJSONString = pingJSON.toString()
         return pingJSONString.toByteArray()
     }

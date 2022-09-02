@@ -56,7 +56,7 @@ class PingActivityTest {
 
         testRule.start(PingActivity.getIntent(context, ping.pingId))
 
-        assertDisplayed(peer.publicAddress)
+        assertDisplayed(peer.internetAddress)
         assertDisplayed(ping.pingId)
         assertContentDescription(R.id.state, R.string.ping_state_sent)
         assertDisplayed(DateTimeFormat.format(ping.sentAt))
@@ -78,7 +78,7 @@ class PingActivityTest {
 
         testRule.start(PingActivity.getIntent(context, ping.pingId))
 
-        assertDisplayed(peer.publicAddress)
+        assertDisplayed(peer.internetAddress)
         assertDisplayed(ping.pingId)
         assertContentDescription(R.id.state, R.string.ping_state_replied)
         assertDisplayed(DateTimeFormat.format(ping.sentAt))
