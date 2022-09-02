@@ -18,6 +18,6 @@
         <ignore path="**/bcpkix-*.jar" />
         <!-- Temporary until https://github.com/Kotlin/kotlinx.coroutines/issues/3277 / https://github.com/Kotlin/kotlinx.coroutines/issues/2004 is resolved. -->
         <!--  Ignoring core jvm artifact should be completely safe, actual code with java.lang.instrument is never loaded, and we don't use the JVM version -->
-        <ignore path="**/kotlinx-coroutines-core-jvm-1.6.3.jar" />
+        <ignore path="**/kotlinx-coroutines-core-jvm-1.*.*.jar" />
     </issue>
 </lint>
