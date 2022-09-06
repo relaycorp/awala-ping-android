@@ -50,6 +50,8 @@ class SendPingTest {
         val sender = mock<FirstPartyEndpoint>()
         whenever(firstPartyEndpointLoad.load(any())).thenReturn(sender)
         val recipient = mock<PublicThirdPartyEndpoint>()
+        val internetRecipientAddress = "example.org"
+        whenever(recipient.internetAddress).thenReturn(internetRecipientAddress)
         whenever(publicThirdPartyEndpointLoad.load(any())).thenReturn(recipient)
 
         whenever(sender.issueAuthorization(any<ThirdPartyEndpoint>(), any())).thenReturn(
@@ -60,7 +62,7 @@ class SendPingTest {
         )
 
         val pingMessageSerialized = ByteArray(0)
-        whenever(pingSerialization.serialize(any(), any(), anyOrNull()))
+        whenever(pingSerialization.serialize(any(), any(), eq(internetRecipientAddress)))
             .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()
