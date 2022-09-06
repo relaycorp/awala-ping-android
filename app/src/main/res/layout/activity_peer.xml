@@ -46,11 +46,11 @@
                 android:background="?android:listDivider" />
 
             <tech.relaycorp.ping.ui.common.FieldView
-                android:id="@+id/privateAddressField"
+                android:id="@+id/idField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:copyEnabled="true"
-                app:label="@string/peer_private_address" />
+                app:label="@string/peer_id" />
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

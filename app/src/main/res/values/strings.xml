@@ -32,7 +32,7 @@
     <string name="peer_public">Public Endpoint</string>
     <string name="peer_private">Private Endpoint</string>
     <string name="peer_add">Add Endpoint</string>
-    <string name="peer_private_address">Private Address</string>
+    <string name="peer_id">Id</string>
     <string name="peer_delete_confirm">Are you sure you want to delete this Endpoint?</string>
     <string name="peer_conn_params_file_label">Connection parameters *</string>
     <string name="peer_conn_params_file_button">Select file</string>

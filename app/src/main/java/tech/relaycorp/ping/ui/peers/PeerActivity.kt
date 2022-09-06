@@ -47,7 +47,7 @@ class PeerActivity : BaseActivity() {
             .peer()
             .onEach {
                 alias.text = it.alias
-                privateAddressField.value = it.nodeId
+                idField.value = it.nodeId
             }
             .launchIn(lifecycleScope)
 
