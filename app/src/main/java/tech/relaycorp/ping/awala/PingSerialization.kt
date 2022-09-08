@@ -1,7 +1,6 @@
 package tech.relaycorp.ping.awala
 
 import android.util.Base64
-import org.json.JSONArray
 import org.json.JSONObject
 import java.nio.charset.Charset
 import javax.inject.Inject
@@ -12,12 +11,12 @@ class PingSerialization
     fun serialize(
         pingId: String,
         pdaPathSerialized: ByteArray,
-        internetAddress: String,
+        endpointInternetAddress: String,
     ): ByteArray {
         val pingJSON = JSONObject()
         pingJSON.put("id", pingId)
         pingJSON.put("pda_path", base64Encode(pdaPathSerialized))
-        pingJSON.put("endpoint_internet_address", internetAddress)
+        pingJSON.put("endpoint_internet_address", endpointInternetAddress)
 
         val pingJSONString = pingJSON.toString()
         return pingJSONString.toByteArray()

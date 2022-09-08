@@ -39,7 +39,7 @@ class SendPing
             recipient,
             ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
         )
-        val internetAddress = recipient.internetAddress
+        val internetAddress = sender.internetAddress
         val pingMessageSerialized = pingSerialization.serialize(
             pingId,
             pdaPathSerialized,
