@@ -48,6 +48,8 @@ class SendPingTest {
         val senderAddress = KeyPairSet.PRIVATE_ENDPOINT.public.nodeId
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(senderAddress))
         val sender = mock<FirstPartyEndpoint>()
+        val internetAddress = "frankfurt.relaycorp.cloud"
+        whenever(sender.internetAddress).thenReturn(internetAddress)
         whenever(firstPartyEndpointLoad.load(any())).thenReturn(sender)
         val recipient = mock<PublicThirdPartyEndpoint>()
         val internetRecipientAddress = "example.org"
@@ -62,7 +64,7 @@ class SendPingTest {
         )
 
         val pingMessageSerialized = ByteArray(0)
-        whenever(pingSerialization.serialize(any(), any(), eq(internetRecipientAddress)))
+        whenever(pingSerialization.serialize(any(), any(), eq(internetAddress)))
             .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()
