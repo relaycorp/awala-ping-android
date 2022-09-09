@@ -65,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:copyEnabled="true"
-                app:label="@string/ping_id" />
+                app:label="@string/id" />
 
             <tech.relaycorp.ping.ui.common.FieldView
                 android:id="@+id/sentAtField"

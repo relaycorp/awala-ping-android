@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "ddcc7e9101fdbbcf6b347011d31d51fd",
+    "identityHash": "d6ae917cc6953d08a1e46653271474f6",
     "entities": [
       {
         "tableName": "ping",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pingId` TEXT NOT NULL, `peerPrivateAddress` TEXT NOT NULL, `peerType` TEXT NOT NULL, `sentAt` INTEGER NOT NULL, `expiresAt` INTEGER NOT NULL, `pongReceivedAt` INTEGER, PRIMARY KEY(`pingId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pingId` TEXT NOT NULL, `peerId` TEXT NOT NULL, `peerType` TEXT NOT NULL, `sentAt` INTEGER NOT NULL, `expiresAt` INTEGER NOT NULL, `pongReceivedAt` INTEGER, PRIMARY KEY(`pingId`))",
         "fields": [
           {
             "fieldPath": "pingId",
@@ -15,8 +15,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "peerPrivateAddress",
-            "columnName": "peerPrivateAddress",
+            "fieldPath": "peerId",
+            "columnName": "peerId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -56,17 +56,17 @@
       },
       {
         "tableName": "public_peer",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`privateAddress` TEXT NOT NULL, `publicAddress` TEXT NOT NULL, `deleted` INTEGER NOT NULL, PRIMARY KEY(`privateAddress`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`nodeId` TEXT NOT NULL, `internetAddress` TEXT NOT NULL, `deleted` INTEGER NOT NULL, PRIMARY KEY(`nodeId`))",
         "fields": [
           {
-            "fieldPath": "privateAddress",
-            "columnName": "privateAddress",
+            "fieldPath": "nodeId",
+            "columnName": "nodeId",
             "affinity": "TEXT",
             "notNull": true
           },
           {
-            "fieldPath": "publicAddress",
-            "columnName": "publicAddress",
+            "fieldPath": "internetAddress",
+            "columnName": "internetAddress",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -79,7 +79,7 @@
         ],
         "primaryKey": {
           "columnNames": [
-            "privateAddress"
+            "nodeId"
           ],
           "autoGenerate": false
         },
@@ -90,7 +90,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ddcc7e9101fdbbcf6b347011d31d51fd')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6ae917cc6953d08a1e46653271474f6')"
     ]
   }
 }

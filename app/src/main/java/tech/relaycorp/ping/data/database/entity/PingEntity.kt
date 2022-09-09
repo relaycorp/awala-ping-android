@@ -11,7 +11,7 @@ import java.time.ZonedDateTime
 @Entity(tableName = "ping")
 data class PingEntity(
     @PrimaryKey val pingId: String,
-    val peerPrivateAddress: String,
+    val peerId: String,
     val peerType: PeerType,
     val sentAt: ZonedDateTime,
     val expiresAt: ZonedDateTime,
@@ -21,8 +21,8 @@ data class PingEntity(
 data class PingWithPublicPeer(
     @Embedded val ping: PingEntity,
     @Relation(
-        parentColumn = "peerPrivateAddress",
-        entityColumn = "privateAddress"
+        parentColumn = "peerId",
+        entityColumn = "nodeId"
     ) val publicPeer: PublicPeerEntity
 ) {
     fun toModel() = Ping(

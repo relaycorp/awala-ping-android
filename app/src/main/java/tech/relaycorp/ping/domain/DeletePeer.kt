@@ -10,9 +10,9 @@ class DeletePeer
     private val publicPeerDao: PublicPeerDao
 ) {
 
-    suspend fun delete(privateAddress: String) {
-        val entity = publicPeerDao.get(privateAddress).first() ?: return
-        PublicThirdPartyEndpoint.load(entity.privateAddress)?.delete()
+    suspend fun delete(nodeId: String) {
+        val entity = publicPeerDao.get(nodeId).first() ?: return
+        PublicThirdPartyEndpoint.load(entity.nodeId)?.delete()
         publicPeerDao.delete(entity)
     }
 }

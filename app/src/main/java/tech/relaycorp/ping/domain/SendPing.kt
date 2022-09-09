@@ -30,7 +30,7 @@ class SendPing
         val sender = firstPartyEndpointLoad.load(senderAddress)
             ?: throw SendPingException("Sender not registered")
 
-        val recipient = publicThirdPartyEndpointLoad.load(peer.privateAddress)
+        val recipient = publicThirdPartyEndpointLoad.load(peer.nodeId)
             ?: throw SendPingException("Recipient not imported")
 
         val pingId = UUID.randomUUID().toString()
@@ -39,9 +39,11 @@ class SendPing
             recipient,
             ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
         )
+        val internetAddress = sender.internetAddress
         val pingMessageSerialized = pingSerialization.serialize(
             pingId,
             pdaPathSerialized,
+            internetAddress,
         )
         val outgoingMessage = outgoingMessageBuilder.build(
             AwalaPing.V1.PingType,
@@ -58,14 +60,14 @@ class SendPing
 
         val ping = PingEntity(
             pingId = pingId,
-            peerPrivateAddress = peer.privateAddress,
+            peerId = peer.nodeId,
             peerType = peer.peerType,
             sentAt = ZonedDateTime.now(),
             expiresAt = expiresAt
         )
         pingDao.save(ping)
 
-        appPreferences.setLastRecipient(peer.privateAddress, peer.peerType)
+        appPreferences.setLastRecipient(peer.nodeId, peer.peerType)
 
         return ping.pingId
     }

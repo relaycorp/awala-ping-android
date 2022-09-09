@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Peer(
-    val privateAddress: String,
+    val nodeId: String,
     val alias: String,
     val peerType: PeerType
 ) : Parcelable

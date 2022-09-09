@@ -89,7 +89,7 @@ class PeersActivity : BaseActivity() {
         list.withModels {
             peers.forEach { peer ->
                 peerItemView {
-                    id(peer.privateAddress)
+                    id(peer.nodeId)
                     item(peer)
                     clickListener {
                         if (isPicker) {
@@ -104,7 +104,7 @@ class PeersActivity : BaseActivity() {
     }
 
     private fun openPeer(peer: Peer) {
-        startActivity(PeerActivity.getIntent(this, peer.privateAddress))
+        startActivity(PeerActivity.getIntent(this, peer.nodeId))
     }
 
     private fun finishWithResult(peer: Peer) {

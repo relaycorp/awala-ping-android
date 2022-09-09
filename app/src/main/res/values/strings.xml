@@ -8,6 +8,7 @@
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="send">Send</string>
+    <string name="id">Id</string>
 
     <!-- Pings -->
     <string name="ping">Ping</string>
@@ -16,7 +17,6 @@
     <string name="ping_expired">Ping sent but pong expired</string>
     <string name="ping_sent_at">Sent at</string>
     <string name="ping_expires_at">Time out</string>
-    <string name="ping_id">ID</string>
     <string name="ping_pong_received_at">Pong received at</string>
     <string name="ping_to">To *</string>
     <string name="ping_send_error">Error sending ping</string>
@@ -32,7 +32,6 @@
     <string name="peer_public">Public Endpoint</string>
     <string name="peer_private">Private Endpoint</string>
     <string name="peer_add">Add Endpoint</string>
-    <string name="peer_private_address">Private Address</string>
     <string name="peer_delete_confirm">Are you sure you want to delete this Endpoint?</string>
     <string name="peer_conn_params_file_label">Connection parameters *</string>
     <string name="peer_conn_params_file_button">Select file</string>

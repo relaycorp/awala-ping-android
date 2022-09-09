@@ -5,7 +5,7 @@ import java.util.*
 
 object PublicPeerEntityFactory {
     fun build() = PublicPeerEntity(
-        privateAddress = UUID.randomUUID().toString(),
-        publicAddress = "example.org"
+        nodeId = UUID.randomUUID().toString(),
+        internetAddress = "example.org"
     )
 }

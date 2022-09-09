@@ -3,7 +3,6 @@ package tech.relaycorp.ping.awala
 import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.ThirdPartyEndpoint
 import tech.relaycorp.awaladroid.messaging.OutgoingMessage
-import tech.relaycorp.awaladroid.messaging.ParcelId
 import java.time.ZonedDateTime
 
 interface OutgoingMessageBuilder {

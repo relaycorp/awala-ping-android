@@ -19,7 +19,7 @@ import tech.relaycorp.ping.test.PublicPeerEntityFactory
 import tech.relaycorp.relaynet.pki.CertificationPath
 import tech.relaycorp.relaynet.testing.pki.KeyPairSet
 import tech.relaycorp.relaynet.testing.pki.PDACertPath
-import tech.relaycorp.relaynet.wrappers.privateAddress
+import tech.relaycorp.relaynet.wrappers.nodeId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 import kotlin.time.minutes
@@ -45,11 +45,15 @@ class SendPingTest {
 
     @Test
     fun sendSuccessful() = runBlockingTest {
-        val senderAddress = KeyPairSet.PRIVATE_ENDPOINT.public.privateAddress
+        val senderAddress = KeyPairSet.PRIVATE_ENDPOINT.public.nodeId
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(senderAddress))
         val sender = mock<FirstPartyEndpoint>()
+        val internetAddress = "frankfurt.relaycorp.cloud"
+        whenever(sender.internetAddress).thenReturn(internetAddress)
         whenever(firstPartyEndpointLoad.load(any())).thenReturn(sender)
         val recipient = mock<PublicThirdPartyEndpoint>()
+        val internetRecipientAddress = "example.org"
+        whenever(recipient.internetAddress).thenReturn(internetRecipientAddress)
         whenever(publicThirdPartyEndpointLoad.load(any())).thenReturn(recipient)
 
         whenever(sender.issueAuthorization(any<ThirdPartyEndpoint>(), any())).thenReturn(
@@ -60,7 +64,7 @@ class SendPingTest {
         )
 
         val pingMessageSerialized = ByteArray(0)
-        whenever(pingSerialization.serialize(any(), any()))
+        whenever(pingSerialization.serialize(any(), any(), eq(internetAddress)))
             .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()
@@ -68,7 +72,7 @@ class SendPingTest {
             .thenReturn(outgoingMessage)
 
         val peerEntity = PublicPeerEntityFactory.build()
-        val peer = Peer(peerEntity.privateAddress, peerEntity.publicAddress, PeerType.Public)
+        val peer = Peer(peerEntity.nodeId, peerEntity.internetAddress, PeerType.Public)
         val duration = 5.minutes
 
         subject.send(peer, duration)
@@ -85,7 +89,7 @@ class SendPingTest {
         )
         verify(sendGatewayMessage).send(outgoingMessage)
         verify(pingDao).save(check {
-            assertEquals(peer.privateAddress, it.peerPrivateAddress)
+            assertEquals(peer.nodeId, it.peerId)
             assertEquals(peer.peerType, it.peerType)
             val expiresAtDiff = ChronoUnit.MINUTES.between(ZonedDateTime.now(), it.expiresAt)
             assertTrue(expiresAtDiff in 4..6)

@@ -20,7 +20,7 @@ class BootstrapData
 
         importDefaultPublicPeer()
         val endpoint = firstPartyEndpointRegistration.register()
-        appPreferences.setFirstPartyEndpointAddress(endpoint.privateAddress)
+        appPreferences.setFirstPartyEndpointAddress(endpoint.nodeId)
     }
 
     private suspend fun importDefaultPublicPeer() {

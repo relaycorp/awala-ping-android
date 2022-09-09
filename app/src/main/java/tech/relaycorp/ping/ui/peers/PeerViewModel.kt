@@ -22,9 +22,9 @@ class PeerViewModel
 
     // Inputs
 
-    private val privateAddressReceived = MutableStateFlow(Optional.empty<String>())
+    private val nodeIdReceived = MutableStateFlow(Optional.empty<String>())
     fun privateAddressReceived(value: String) {
-        privateAddressReceived.value = Optional.of(value)
+        nodeIdReceived.value = Optional.of(value)
     }
 
     private val deleteClicks = PublishFlow<Click>()
@@ -39,7 +39,7 @@ class PeerViewModel
     fun finish() = _finish.asFlow()
 
     init {
-        privateAddressReceived
+        nodeIdReceived
             .element()
             .flatMapLatest(getPeer::get)
             .onEach { _peer.value = Optional.of(it) }
@@ -47,7 +47,7 @@ class PeerViewModel
 
         deleteClicks
             .asFlow()
-            .flatMapLatest { privateAddressReceived.element() }
+            .flatMapLatest { nodeIdReceived.element() }
             .onEach {
                 deletePeer.delete(it)
                 _finish.finish()

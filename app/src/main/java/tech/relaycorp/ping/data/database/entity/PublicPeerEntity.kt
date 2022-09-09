@@ -7,14 +7,14 @@ import tech.relaycorp.ping.domain.model.PeerType
 
 @Entity(tableName = "public_peer")
 data class PublicPeerEntity(
-    @PrimaryKey val privateAddress: String,
-    val publicAddress: String,
+    @PrimaryKey val nodeId: String,
+    val internetAddress: String,
     val deleted: Boolean = false
 ) {
 
     fun toModel() = Peer(
-        privateAddress = privateAddress,
-        alias = publicAddress,
+        nodeId = nodeId,
+        alias = internetAddress,
         peerType = PeerType.Public
     )
 }
