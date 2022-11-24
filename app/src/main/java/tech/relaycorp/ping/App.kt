@@ -5,11 +5,11 @@ import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.relaycorp.awaladroid.Awala
 import tech.relaycorp.awaladroid.GatewayBindingException
 import tech.relaycorp.awaladroid.GatewayClient
+import tech.relaycorp.awaladroid.GatewayProtocolException
 import tech.relaycorp.ping.common.Logging.logger
 import tech.relaycorp.ping.common.di.AppComponent
 import tech.relaycorp.ping.common.di.DaggerAppComponent
@@ -51,6 +51,9 @@ open class App : Application() {
             GatewayClient.receiveMessages().collect(receivePong::receive)
         } catch (exp: GatewayBindingException) {
             logger.log(Level.WARNING, "Gateway binding exception", exp)
+            openNoGateway()
+        } catch (exp: GatewayProtocolException) {
+            logger.log(Level.WARNING, "Gateway Protocol exception", exp)
             openNoGateway()
         }
     }
