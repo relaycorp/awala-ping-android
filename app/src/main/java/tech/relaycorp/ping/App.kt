@@ -47,20 +47,22 @@ open class App : Application() {
         Awala.setUp(this)
         try {
             GatewayClient.bind()
-            bootstrapData.bootstrapIfNeeded()
+
+            if(!bootstrapData.bootstrapIfNeeded()) {
+                openNoGateway(isGatewayInstalled = true)
+                return
+            }
+
             GatewayClient.receiveMessages().collect(receivePong::receive)
         } catch (exp: GatewayBindingException) {
             logger.log(Level.WARNING, "Gateway binding exception", exp)
             openNoGateway()
-        } catch (exp: GatewayProtocolException) {
-            logger.log(Level.WARNING, "Gateway Protocol exception", exp)
-            openNoGateway()
         }
     }
 
-    private fun openNoGateway() {
+    private fun openNoGateway(isGatewayInstalled: Boolean = false) {
         startActivity(
-            NoGatewayActivity.getIntent(this)
+            NoGatewayActivity.getIntent(this, isGatewayInstalled)
                 .addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_CLEAR_TASK or

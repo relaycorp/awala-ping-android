@@ -50,4 +50,9 @@
             android:label="@string/about_licenses" />
         <activity android:name=".ui.main.NoGatewayActivity" />
     </application>
+
+    <queries>
+        <package android:name="${awala_package}" />
+    </queries>
+
 </manifest>

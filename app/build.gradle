@@ -67,6 +67,10 @@ android {
             }
         }
     }
+    buildTypes.all { buildType ->
+        manifestPlaceholders = [ awala_package: awalaPackage]
+        resValue "string", "awala_package", awalaPackage
+    }
     compileOptions {
          coreLibraryDesugaringEnabled true
 
