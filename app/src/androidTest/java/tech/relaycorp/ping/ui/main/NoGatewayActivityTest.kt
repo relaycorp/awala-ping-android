@@ -25,17 +25,6 @@ class NoGatewayActivityTest {
     }
 
     @Test
-    fun defaultGatewayNotInstalledTest() {
-        testRule.start()
-
-        assertDisplayed(R.string.no_gateway_title)
-        assertDisplayed(R.string.no_gateway_message)
-        assertDisplayed(R.string.no_gateway_download)
-        assertDisplayed(R.string.no_gateway_download_other)
-
-    }
-
-    @Test
     fun gatewayInstalledTest() {
         testRule.start(
             NoGatewayActivity.getIntent(
@@ -43,13 +32,27 @@ class NoGatewayActivityTest {
                 true
             )
         )
-
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
         assertDisplayed(R.string.bad_gateway_title)
         assertDisplayed(R.string.bad_gateway_message)
         assertDisplayed(R.string.bad_gateway_download)
         assertNotDisplayed(R.id.secondaryActionBtn)
     }
 
+    @Test
+    fun gatewayNotInstalledTest() {
+        testRule.start(
+            NoGatewayActivity.getIntent(
+                InstrumentationRegistry.getInstrumentation().targetContext,
+                false
+            )
+        )
+        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
+        assertDisplayed(R.string.no_gateway_title)
+        assertDisplayed(R.string.no_gateway_message)
+        assertDisplayed(R.string.no_gateway_download)
+        assertDisplayed(R.string.no_gateway_download_other)
+    }
 
 }
 

@@ -48,7 +48,7 @@ class NoGatewayActivity : BaseActivity() {
 
         titleTv.text = getString(
             if (isGatewayInstalled) R.string.bad_gateway_title
-            else R.string.no_gateway_message
+            else R.string.no_gateway_title
         )
         messageTv.text = getString(
             if (isGatewayInstalled) R.string.bad_gateway_message
