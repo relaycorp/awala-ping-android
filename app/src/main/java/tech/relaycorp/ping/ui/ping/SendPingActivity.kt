@@ -37,7 +37,7 @@ class SendPingActivity : BaseActivity() {
         setupNavigation()
 
         toolbar.inflateMenu(R.menu.send_ping)
-        toolbar.menu.findItem(R.id.send).icon.setTintList(getColorStateListCompat(R.color.primary))
+        toolbar.menu.findItem(R.id.send).icon?.setTintList(getColorStateListCompat(R.color.primary))
         toolbar.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.send -> viewModel.sendClicked()
