@@ -2,14 +2,18 @@ package tech.relaycorp.ping.ui.ping
 
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.adevinta.android.barista.assertion.BaristaContentDescriptionAssertions.assertContentDescription
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertDisplayed
 import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assertNotDisplayed
-import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
@@ -97,7 +101,14 @@ class PingActivityTest {
 
         testRule.start(PingActivity.getIntent(context, ping.pingId))
 
-        clickOn(R.id.copy)
+
+        onView(
+            allOf(
+                withId(R.id.copy),
+                isDescendantOfA(withId(R.id.pingIdField))
+            )
+        ).perform(click())
+
         assertDisplayed(R.string.copy_confirm)
 
         runBlocking(Dispatchers.Main) {
