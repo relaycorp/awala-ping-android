@@ -2,15 +2,21 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "d6ae917cc6953d08a1e46653271474f6",
+    "identityHash": "0def5035f1b4ef53694c04abdfa8b49c",
     "entities": [
       {
         "tableName": "ping",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pingId` TEXT NOT NULL, `peerId` TEXT NOT NULL, `peerType` TEXT NOT NULL, `sentAt` INTEGER NOT NULL, `expiresAt` INTEGER NOT NULL, `pongReceivedAt` INTEGER, PRIMARY KEY(`pingId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`pingId` TEXT NOT NULL, `parcelId` TEXT NOT NULL, `peerId` TEXT NOT NULL, `peerType` TEXT NOT NULL, `sentAt` INTEGER NOT NULL, `expiresAt` INTEGER NOT NULL, `pongReceivedAt` INTEGER, PRIMARY KEY(`pingId`))",
         "fields": [
           {
             "fieldPath": "pingId",
             "columnName": "pingId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parcelId",
+            "columnName": "parcelId",
             "affinity": "TEXT",
             "notNull": true
           },
@@ -90,7 +96,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd6ae917cc6953d08a1e46653271474f6')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0def5035f1b4ef53694c04abdfa8b49c')"
     ]
   }
 }

@@ -53,6 +53,7 @@ class PingActivity : BaseActivity() {
                 )
                 sentAtField.value = DateTimeFormat.format(it.sentAt)
                 pingIdField.value = it.pingId
+                parcelIdField.value = it.parcelId
                 expiresAtField.value = DateTimeFormat.format(it.expiresAt)
                 pongReceivedField.isVisible = it.pongReceivedAt != null
                 pongReceivedField.value = DateTimeFormat.format(it.pongReceivedAt)

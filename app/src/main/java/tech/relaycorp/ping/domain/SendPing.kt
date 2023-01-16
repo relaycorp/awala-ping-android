@@ -60,6 +60,7 @@ class SendPing
 
         val ping = PingEntity(
             pingId = pingId,
+            parcelId = outgoingMessage.parcelId.value,
             peerId = peer.nodeId,
             peerType = peer.peerType,
             sentAt = ZonedDateTime.now(),
