@@ -11,6 +11,7 @@ object PingEntityFactory {
         val now = ZonedDateTime.now().withNano(0)
         return PingEntity(
             pingId = UUID.randomUUID().toString(),
+            parcelId = UUID.randomUUID().toString(),
             peerId = peer.nodeId,
             peerType = PeerType.Public,
             sentAt = now,
