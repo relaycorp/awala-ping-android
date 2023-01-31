@@ -10,6 +10,7 @@ import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.PublicThirdPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.ThirdPartyEndpoint
 import tech.relaycorp.awaladroid.messaging.OutgoingMessage
+import tech.relaycorp.awaladroid.messaging.ParcelId
 import tech.relaycorp.ping.awala.*
 import tech.relaycorp.ping.data.database.dao.PingDao
 import tech.relaycorp.ping.data.preference.AppPreferences
@@ -22,6 +23,7 @@ import tech.relaycorp.relaynet.testing.pki.PDACertPath
 import tech.relaycorp.relaynet.wrappers.nodeId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 import kotlin.time.minutes
 
 class SendPingTest {
@@ -68,6 +70,8 @@ class SendPingTest {
             .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()
+        val parcelId = ParcelId.generate()
+        whenever(outgoingMessage.parcelId).thenReturn(parcelId)
         whenever(outgoingMessageBuilder.build(any(), any(), any(), any(), any()))
             .thenReturn(outgoingMessage)
 
@@ -90,6 +94,7 @@ class SendPingTest {
         verify(sendGatewayMessage).send(outgoingMessage)
         verify(pingDao).save(check {
             assertEquals(peer.nodeId, it.peerId)
+            assertEquals(parcelId.value, it.parcelId)
             assertEquals(peer.peerType, it.peerType)
             val expiresAtDiff = ChronoUnit.MINUTES.between(ZonedDateTime.now(), it.expiresAt)
             assertTrue(expiresAtDiff in 4..6)

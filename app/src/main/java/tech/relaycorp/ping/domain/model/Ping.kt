@@ -4,6 +4,7 @@ import java.time.ZonedDateTime
 
 data class Ping(
     val pingId: String,
+    val parcelId: String,
     val peer: Peer,
     val sentAt: ZonedDateTime,
     val expiresAt: ZonedDateTime,

@@ -68,6 +68,13 @@
                 app:label="@string/id" />
 
             <tech.relaycorp.ping.ui.common.FieldView
+                android:id="@+id/parcelIdField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:copyEnabled="true"
+                app:label="@string/parcel_id" />
+
+            <tech.relaycorp.ping.ui.common.FieldView
                 android:id="@+id/sentAtField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
