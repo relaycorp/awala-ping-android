@@ -7,6 +7,8 @@ buildscript {
     kotlinCoroutinesVersion = '1.6.3'
     junitVersion = '5.7.1'
     aboutLibrariesVersion = '8.9.4'
+
+    awalaPackage = 'tech.relaycorp.gateway'
   }
   repositories {
     google()

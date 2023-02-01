@@ -15,33 +15,35 @@
         android:padding="64dp">
 
         <TextView
+            android:id="@+id/titleTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="64dp"
             android:layout_marginBottom="16dp"
             android:gravity="center_horizontal"
-            android:text="@string/no_gateway_title"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:text="@string/no_gateway_title" />
 
         <TextView
+            android:id="@+id/messageTv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="32dp"
             android:gravity="center_horizontal"
-            android:text="@string/no_gateway_message" />
+            tools:text="@string/no_gateway_message" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/download"
+            android:id="@+id/actionBtn"
             style="@style/Widget.Ping.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:text="@string/no_gateway_download"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:text="@string/no_gateway_download" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/downloadOther"
+            android:id="@+id/secondaryActionBtn"
             style="@style/Widget.Ping.Button.Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

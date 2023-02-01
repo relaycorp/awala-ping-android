@@ -1,5 +1,5 @@
 <resources>
     <string name="awala_website" translatable="false">https://awala.network/</string>
-    <string name="download_gateway" translatable="false">https://play.google.com/store/apps/details?id=tech.relaycorp.gateway</string>
+    <string name="download_playstore" translatable="false">https://play.google.com/store/apps/details?id=%s</string>
     <string name="download_gateway_other" translatable="false">https://awala.network/users</string>
 </resources>

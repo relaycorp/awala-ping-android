@@ -50,8 +50,11 @@
 
     <!-- No Gateway -->
     <string name="no_gateway_title">Awala doesn\'t appear\nto be installed</string>
+    <string name="bad_gateway_title">Awala doesn\'t appear\nto be properly installed</string>
     <string name="no_gateway_message">Install Awala so that you can\nuse this app.</string>
+    <string name="bad_gateway_message">Check Awala configuration to\nuse this app.</string>
     <string name="no_gateway_download">Install Awala</string>
+    <string name="bad_gateway_download">Open Awala</string>
     <string name="no_gateway_download_other">Other download options</string>
 
     <!-- Units -->

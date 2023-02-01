@@ -4,8 +4,10 @@ import android.content.res.Resources
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.mockito.Mockito.verifyNoInteractions
+import tech.relaycorp.awaladroid.GatewayProtocolException
 import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.ping.awala.FirstPartyEndpointRegistration
 import tech.relaycorp.ping.data.preference.AppPreferences
@@ -24,8 +26,9 @@ class BootstrapDataTest {
     fun bootstrap_ifNotNeeded() = runBlockingTest {
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf("123456"))
 
-        subject.bootstrapIfNeeded()
+        val success = subject.bootstrapIfNeeded()
 
+        assert(success)
         verifyNoInteractions(registerFirstPartyEndpoint)
         verifyNoInteractions(addPublicPeer)
         verify(appPreferences, never()).setFirstPartyEndpointAddress(any())
@@ -39,11 +42,30 @@ class BootstrapDataTest {
         whenever(firstPartyEndpoint.nodeId).thenReturn(firstPartyAddress)
         whenever(registerFirstPartyEndpoint.register()).thenReturn(firstPartyEndpoint)
         whenever(resources.openRawResource(any())).thenReturn(ByteArray(0).inputStream())
+        whenever(appPreferences.setFirstPartyEndpointAddress(firstPartyAddress)).thenReturn(true)
 
-        subject.bootstrapIfNeeded()
+        val success = subject.bootstrapIfNeeded()
 
+        assert(success)
         verify(addPublicPeer).add(any())
         verify(registerFirstPartyEndpoint).register()
         verify(appPreferences).setFirstPartyEndpointAddress(eq(firstPartyAddress))
+    }
+
+    @Test
+    fun boostrap_registerException() = runTest {
+        whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(null))
+        whenever(resources.openRawResource(any())).thenReturn(ByteArray(0).inputStream())
+        given(registerFirstPartyEndpoint.register()).willAnswer {
+            throw GatewayProtocolException("")
+        }
+
+
+        val error = subject.bootstrapIfNeeded()
+
+        assert(!error)
+        verify(addPublicPeer).add(any())
+        verify(registerFirstPartyEndpoint).register()
+        verify(appPreferences, never()).setFirstPartyEndpointAddress(any())
     }
 }

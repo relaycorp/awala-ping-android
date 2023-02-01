@@ -5,11 +5,11 @@ import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.relaycorp.awaladroid.Awala
 import tech.relaycorp.awaladroid.GatewayBindingException
 import tech.relaycorp.awaladroid.GatewayClient
+import tech.relaycorp.awaladroid.GatewayProtocolException
 import tech.relaycorp.ping.common.Logging.logger
 import tech.relaycorp.ping.common.di.AppComponent
 import tech.relaycorp.ping.common.di.DaggerAppComponent
@@ -47,7 +47,12 @@ open class App : Application() {
         Awala.setUp(this)
         try {
             GatewayClient.bind()
-            bootstrapData.bootstrapIfNeeded()
+
+            if(!bootstrapData.bootstrapIfNeeded()) {
+                openNoGateway(isGatewayInstalled = true)
+                return
+            }
+
             GatewayClient.receiveMessages().collect(receivePong::receive)
         } catch (exp: GatewayBindingException) {
             logger.log(Level.WARNING, "Gateway binding exception", exp)
@@ -55,9 +60,9 @@ open class App : Application() {
         }
     }
 
-    private fun openNoGateway() {
+    private fun openNoGateway(isGatewayInstalled: Boolean = false) {
         startActivity(
-            NoGatewayActivity.getIntent(this)
+            NoGatewayActivity.getIntent(this, isGatewayInstalled)
                 .addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_CLEAR_TASK or

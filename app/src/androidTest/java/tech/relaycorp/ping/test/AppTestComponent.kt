@@ -5,6 +5,7 @@ import tech.relaycorp.ping.AppModule
 import tech.relaycorp.ping.awala.AwalaModule
 import tech.relaycorp.ping.common.di.AppComponent
 import tech.relaycorp.ping.ui.main.MainActivityTest
+import tech.relaycorp.ping.ui.main.NoGatewayActivityTest
 import tech.relaycorp.ping.ui.peers.AddPublicPeerActivityTest
 import tech.relaycorp.ping.ui.peers.PeerActivityTest
 import tech.relaycorp.ping.ui.peers.PeersActivityTest
@@ -25,6 +26,7 @@ interface AppTestComponent : AppComponent {
 
     fun inject(test: AddPublicPeerActivityTest)
     fun inject(test: MainActivityTest)
+    fun inject(test: NoGatewayActivityTest)
     fun inject(test: PeerActivityTest)
     fun inject(test: PeersActivityTest)
     fun inject(test: PingActivityTest)
