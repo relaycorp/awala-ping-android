@@ -2,11 +2,11 @@ package tech.relaycorp.ping.ui.peers
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import com.airbnb.epoxy.CallbackProp
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
-import kotlinx.android.synthetic.main.item_peer.view.*
-import tech.relaycorp.ping.R
+import tech.relaycorp.ping.databinding.ItemPeerBinding
 import tech.relaycorp.ping.domain.model.Peer
 import tech.relaycorp.ping.ui.BaseView
 
@@ -19,13 +19,11 @@ constructor(
     defStyleAttr: Int = 0
 ) : BaseView(context, attrs, defStyleAttr) {
 
-    init {
-        inflate(context, R.layout.item_peer, this)
-    }
+    private val binding = ItemPeerBinding.inflate(LayoutInflater.from(context), this, true)
 
     @ModelProp
     fun setItem(item: Peer) {
-        alias.text = item.alias
+        binding.alias.text = item.alias
     }
 
     @CallbackProp

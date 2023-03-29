@@ -2,11 +2,14 @@ package tech.relaycorp.ping.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.WindowCompat
+import com.google.android.material.appbar.AppBarLayout
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.android.synthetic.main.common_app_bar.*
 import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.asFlow
 import tech.relaycorp.ping.ui.common.MessageManager
@@ -24,6 +27,10 @@ abstract class BaseActivity : AppCompatActivity() {
     protected val messageManager by lazy { MessageManager(this) }
     protected val loadingManager by lazy { LoadingManager(this) }
 
+    private val appBar: AppBarLayout? get() = findViewById(R.id.appBar)
+    protected val toolbar: Toolbar? get() = findViewById(R.id.toolbar)
+    protected val toolbarTitle: TextView? get() = findViewById(R.id.toolbarTitle)
+
     protected val results get() = _results.asFlow()
     private val _results = PublishFlow<ActivityResult>()
 
@@ -34,13 +41,14 @@ abstract class BaseActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
     }
 
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         _results.trySendBlocking(ActivityResult(requestCode, resultCode, data))
     }
 
-    override fun setContentView(layoutResID: Int) {
-        super.setContentView(layoutResID)
+    override fun setContentView(view: View?) {
+        super.setContentView(view)
         toolbarTitle?.text = title
         appBar?.applyInsetter {
             type(statusBars = true) {

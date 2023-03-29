@@ -4,10 +4,11 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.core.content.res.use
 import androidx.core.view.isVisible
-import kotlinx.android.synthetic.main.view_field.view.*
 import tech.relaycorp.ping.R
+import tech.relaycorp.ping.databinding.ViewFieldBinding
 import tech.relaycorp.ping.ui.BaseView
 
 class FieldView
@@ -18,22 +19,25 @@ constructor(
     defStyleAttr: Int = 0
 ) : BaseView(context, attrs, defStyleAttr) {
 
+    private val binding =
+        ViewFieldBinding.inflate(LayoutInflater.from(context), this, true)
+
     var label: String?
-        get() = labelText.text.toString()
+        get() = binding.labelText.text.toString()
         set(value) {
-            labelText.text = value
+            binding.labelText.text = value
         }
 
     var value: String
-        get() = valueText.text.toString()
+        get() = binding.valueText.text.toString()
         set(value) {
-            valueText.text = value
+            binding.valueText.text = value
         }
 
-    var copyEnabled: Boolean
-        get() = copy.isVisible
+    private var copyEnabled: Boolean
+        get() = binding.copy.isVisible
         set(value) {
-            copy.isVisible = value
+            binding.copy.isVisible = value
         }
 
     private val clipboard by lazy {
@@ -41,14 +45,12 @@ constructor(
     }
 
     init {
-        inflate(context, R.layout.view_field, this)
-
         context.theme.obtainStyledAttributes(attrs, R.styleable.Field, 0, 0).use {
             label = it.getString(R.styleable.Field_label) ?: ""
             copyEnabled = it.getBoolean(R.styleable.Field_copyEnabled, false)
         }
 
-        copy.setOnClickListener {
+        binding.copy.setOnClickListener {
             clipboard.setPrimaryClip(ClipData.newPlainText(label, value))
             messageManager.showMessage(R.string.copy_confirm)
         }

@@ -2,20 +2,24 @@ package tech.relaycorp.ping.ui.main
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.LayoutInflater
 import androidx.lifecycle.lifecycleScope
 import com.airbnb.epoxy.ModelProp
 import com.airbnb.epoxy.ModelView
-import kotlinx.android.synthetic.main.item_ping.view.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.plus
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.common.flowInterval
+import tech.relaycorp.ping.databinding.ItemPingBinding
 import tech.relaycorp.ping.domain.model.Ping
 import tech.relaycorp.ping.ui.BaseView
 import tech.relaycorp.ping.ui.common.DateTimeFormat
 import tech.relaycorp.ping.ui.ping.PingActivity
-import kotlin.time.seconds
+import kotlin.time.Duration.Companion.seconds
 
 @ModelView(autoLayout = ModelView.Size.MATCH_WIDTH_WRAP_HEIGHT)
 class PingItemView
@@ -26,15 +30,13 @@ constructor(
     defStyleAttr: Int = 0
 ) : BaseView(context, attrs, defStyleAttr) {
 
-    init {
-        inflate(context, R.layout.item_ping, this)
-    }
+    private val binding = ItemPingBinding.inflate(LayoutInflater.from(context), this, true)
 
     private var refreshScope: CoroutineScope? = null
 
     @ModelProp
     fun setItem(item: Ping) {
-        recipient.text = item.peer.alias
+        binding.recipient.text = item.peer.alias
 
         refresh { setRefreshableState(item) }
 
@@ -46,16 +48,16 @@ constructor(
     }
 
     private fun setRefreshableState(item: Ping) {
-        sentAt.text = DateTimeFormat.format(item.sentAt)
+        binding.sentAt.text = DateTimeFormat.format(item.sentAt)
 
-        state.setImageResource(
+        binding.state.setImageResource(
             when (item.state) {
                 Ping.State.Sent -> R.drawable.ic_check
                 Ping.State.SendAndReplied -> R.drawable.ic_double_check
                 Ping.State.Expired -> R.drawable.ic_expired
             }
         )
-        state.contentDescription = resources.getString(
+        binding.state.contentDescription = resources.getString(
             when (item.state) {
                 Ping.State.Sent -> R.string.ping_sent
                 Ping.State.SendAndReplied -> R.string.ping_sent_and_replied

@@ -8,12 +8,11 @@ import android.widget.ArrayAdapter
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activity_send_ping.*
-import kotlinx.android.synthetic.main.common_app_bar.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.common.di.ViewModelFactory
+import tech.relaycorp.ping.databinding.ActivitySendPingBinding
 import tech.relaycorp.ping.domain.model.Peer
 import tech.relaycorp.ping.ui.BaseActivity
 import tech.relaycorp.ping.ui.common.SimpleItemSelectedListener
@@ -30,25 +29,29 @@ class SendPingActivity : BaseActivity() {
         ViewModelProvider(this, viewModelFactory).get(SendPingViewModel::class.java)
     }
 
+    private lateinit var binding: ActivitySendPingBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        setContentView(R.layout.activity_send_ping)
+        binding = ActivitySendPingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupNavigation()
 
-        toolbar.inflateMenu(R.menu.send_ping)
-        toolbar.menu.findItem(R.id.send).icon?.setTintList(getColorStateListCompat(R.color.primary))
-        toolbar.setOnMenuItemClickListener {
+        toolbar?.inflateMenu(R.menu.send_ping)
+        toolbar?.menu?.findItem(R.id.send)?.icon
+            ?.setTintList(getColorStateListCompat(R.color.primary))
+        toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.send -> viewModel.sendClicked()
             }
             true
         }
 
-        toButton.setOnClickListener {
+        binding.toButton.setOnClickListener {
             openPeerPicker()
         }
-        toPeer.setOnClickListener {
+        binding.toPeer.setOnClickListener {
             openPeerPicker()
         }
 
@@ -58,9 +61,9 @@ class SendPingActivity : BaseActivity() {
             .peer()
             .onEach { peerOp ->
                 val hasPeer = peerOp.isPresent
-                toButton.isVisible = !hasPeer
-                toPeer.isVisible = hasPeer
-                toPeer.text = if (hasPeer) {
+                binding.toButton.isVisible = !hasPeer
+                binding.toPeer.isVisible = hasPeer
+                binding.toPeer.text = if (hasPeer) {
                     peerOp.get().alias
                 } else ""
             }
@@ -69,7 +72,7 @@ class SendPingActivity : BaseActivity() {
         viewModel
             .sendEnabled()
             .onEach {
-                toolbar.menu.findItem(R.id.send).isEnabled = it
+                toolbar?.menu?.findItem(R.id.send)?.isEnabled = it
             }
             .launchIn(lifecycleScope)
 
@@ -120,13 +123,13 @@ class SendPingActivity : BaseActivity() {
             ExpireDuration.DEFAULT.unit.valueOptions.toMutableList()
         )
 
-        expiresAtUnit.onItemSelectedListener = SimpleItemSelectedListener { position ->
-            val oldValue = expiresAtValue.selectedItem
+        binding.expiresAtUnit.onItemSelectedListener = SimpleItemSelectedListener { position ->
+            val oldValue = binding.expiresAtValue.selectedItem
             val unit = ExpireDuration.Unit.values()[position]
             valueAdapter.clear()
             valueAdapter.addAll(unit.valueOptions)
             // Keep old value if possible
-            expiresAtValue.setSelection(
+            binding.expiresAtValue.setSelection(
                 if (unit.valueOptions.contains(oldValue)) {
                     unit.valueOptions.indexOf(oldValue)
                 } else {
@@ -135,13 +138,13 @@ class SendPingActivity : BaseActivity() {
             )
             viewModel.expiresAtChanged(
                 ExpireDuration(
-                    unit.valueOptions[expiresAtValue.selectedItemPosition],
+                    unit.valueOptions[binding.expiresAtValue.selectedItemPosition],
                     unit
                 )
             )
         }
-        expiresAtValue.onItemSelectedListener = SimpleItemSelectedListener { position ->
-            val unit = ExpireDuration.Unit.values()[expiresAtUnit.selectedItemPosition]
+        binding.expiresAtValue.onItemSelectedListener = SimpleItemSelectedListener { position ->
+            val unit = ExpireDuration.Unit.values()[binding.expiresAtUnit.selectedItemPosition]
             viewModel.expiresAtChanged(
                 ExpireDuration(
                     unit.valueOptions[position],
@@ -150,14 +153,14 @@ class SendPingActivity : BaseActivity() {
             )
         }
 
-        expiresAtUnit.adapter = unitAdapter
-        expiresAtValue.adapter = valueAdapter
+        binding.expiresAtUnit.adapter = unitAdapter
+        binding.expiresAtValue.adapter = valueAdapter
         setExpiresAt(ExpireDuration.DEFAULT)
     }
 
     private fun setExpiresAt(expiresAt: ExpireDuration) {
-        expiresAtUnit.setSelection(expiresAt.unit.ordinal)
-        expiresAtValue.setSelection(expiresAt.unit.valueOptions.indexOf(expiresAt.value))
+        binding.expiresAtUnit.setSelection(expiresAt.unit.ordinal)
+        binding.expiresAtValue.setSelection(expiresAt.unit.valueOptions.indexOf(expiresAt.value))
     }
 
     private fun openPeerPicker() {

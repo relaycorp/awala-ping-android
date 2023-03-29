@@ -7,12 +7,11 @@ import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import kotlinx.android.synthetic.main.activity_add_public_peer.*
-import kotlinx.android.synthetic.main.common_app_bar.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.common.di.ViewModelFactory
+import tech.relaycorp.ping.databinding.ActivityAddPublicPeerBinding
 import tech.relaycorp.ping.ui.BaseActivity
 import javax.inject.Inject
 
@@ -25,24 +24,27 @@ class AddPublicPeerActivity : BaseActivity() {
         ViewModelProvider(this, viewModelFactory).get(AddPublicPeerViewModel::class.java)
     }
 
+    private lateinit var binding: ActivityAddPublicPeerBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        setContentView(R.layout.activity_add_public_peer)
+        binding = ActivityAddPublicPeerBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupNavigation(R.drawable.ic_close)
 
-        toolbar.inflateMenu(R.menu.add_peer)
-        toolbar.setOnMenuItemClickListener {
+        toolbar?.inflateMenu(R.menu.add_peer)
+        toolbar?.setOnMenuItemClickListener {
             when (it.itemId) {
                 R.id.save -> viewModel.saveClicked()
             }
             true
         }
 
-        connectionParamsButton.setOnClickListener {
+        binding.connectionParamsButton.setOnClickListener {
             openFileDialog()
         }
-        connectionParamsClear.setOnClickListener {
+        binding.connectionParamsClear.setOnClickListener {
             viewModel.removeConnectionParamsFileClicked()
         }
 
@@ -50,12 +52,12 @@ class AddPublicPeerActivity : BaseActivity() {
             .connectionParamsFile()
             .onEach {
                 val hasConnectionParams = it.isPresent
-                connectionParamsButton.isVisible = !hasConnectionParams
-                connectionParamsName.isVisible = hasConnectionParams
-                connectionParamsName.text = if (hasConnectionParams) {
+                binding.connectionParamsButton.isVisible = !hasConnectionParams
+                binding.connectionParamsName.isVisible = hasConnectionParams
+                binding.connectionParamsName.text = if (hasConnectionParams) {
                     it.get().ifBlank { getString(R.string.peer_conn_params_file_picked) }
                 } else ""
-                connectionParamsClear.isVisible = hasConnectionParams
+                binding.connectionParamsClear.isVisible = hasConnectionParams
             }
             .launchIn(lifecycleScope)
 

@@ -2,9 +2,9 @@ package tech.relaycorp.ping.ui.ping
 
 import androidx.annotation.StringRes
 import tech.relaycorp.ping.R
-import kotlin.time.days
-import kotlin.time.hours
-import kotlin.time.minutes
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 data class ExpireDuration(val value: Int, val unit: Unit) {
     enum class Unit(val valueOptions: List<Int>, @StringRes val stringRes: Int) {

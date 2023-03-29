@@ -6,21 +6,24 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Process.killProcess
 import androidx.annotation.StringRes
-import kotlinx.android.synthetic.main.activity_no_gateway.*
 import tech.relaycorp.ping.R
+import tech.relaycorp.ping.databinding.ActivityNoGatewayBinding
 import tech.relaycorp.ping.ui.BaseActivity
 
 class NoGatewayActivity : BaseActivity() {
 
+    private lateinit var binding: ActivityNoGatewayBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_no_gateway)
+        binding = ActivityNoGatewayBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupNavigation(R.drawable.ic_close)
 
-        download.setOnClickListener {
+        binding.download.setOnClickListener {
             openUrl(R.string.download_gateway)
         }
-        downloadOther.setOnClickListener {
+        binding.downloadOther.setOnClickListener {
             openUrl(R.string.download_gateway_other)
         }
     }
