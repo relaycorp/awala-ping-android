@@ -34,10 +34,10 @@ class SendPing
             ?: throw SendPingException("Recipient not imported")
 
         val pingId = UUID.randomUUID().toString()
-        val expiresAt = ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
+        val expiresAt = ZonedDateTime.now().plusSeconds(duration.inWholeSeconds)
         val pdaPathSerialized = sender.issueAuthorization(
             recipient,
-            ZonedDateTime.now().plusSeconds(duration.inSeconds.toLong())
+            ZonedDateTime.now().plusSeconds(duration.inWholeSeconds)
         )
         val internetAddress = sender.internetAddress
         val pingMessageSerialized = pingSerialization.serialize(

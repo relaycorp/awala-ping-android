@@ -1,6 +1,11 @@
 package tech.relaycorp.ping.domain
 
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.check
+import com.nhaarman.mockitokotlin2.eq
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Assert.assertEquals
@@ -11,7 +16,12 @@ import tech.relaycorp.awaladroid.endpoint.PublicThirdPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.ThirdPartyEndpoint
 import tech.relaycorp.awaladroid.messaging.OutgoingMessage
 import tech.relaycorp.awaladroid.messaging.ParcelId
-import tech.relaycorp.ping.awala.*
+import tech.relaycorp.ping.awala.AwalaPing
+import tech.relaycorp.ping.awala.FirstPartyEndpointLoad
+import tech.relaycorp.ping.awala.OutgoingMessageBuilder
+import tech.relaycorp.ping.awala.PingSerialization
+import tech.relaycorp.ping.awala.PublicThirdPartyEndpointLoad
+import tech.relaycorp.ping.awala.SendGatewayMessage
 import tech.relaycorp.ping.data.database.dao.PingDao
 import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.domain.model.Peer
@@ -23,8 +33,7 @@ import tech.relaycorp.relaynet.testing.pki.PDACertPath
 import tech.relaycorp.relaynet.wrappers.nodeId
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.UUID
-import kotlin.time.minutes
+import kotlin.time.Duration.Companion.minutes
 
 class SendPingTest {
 

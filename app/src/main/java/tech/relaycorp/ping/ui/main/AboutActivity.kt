@@ -5,24 +5,28 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import com.mikepenz.aboutlibraries.LibsBuilder
-import kotlinx.android.synthetic.main.activity_about.*
 import tech.relaycorp.ping.BuildConfig
 import tech.relaycorp.ping.R
+import tech.relaycorp.ping.databinding.ActivityAboutBinding
 import tech.relaycorp.ping.ui.BaseActivity
 
 class AboutActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityAboutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+        binding = ActivityAboutBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupNavigation()
 
-        version.text = getString(
+        binding.version.text = getString(
             R.string.about_version,
             BuildConfig.VERSION_NAME,
             BuildConfig.VERSION_CODE.toString()
         )
-        learnMore.setOnClickListener { openKnowMore() }
-        libraries.setOnClickListener { openLicenses() }
+        binding.learnMore.setOnClickListener { openKnowMore() }
+        binding.libraries.setOnClickListener { openLicenses() }
     }
 
     private fun openKnowMore() {

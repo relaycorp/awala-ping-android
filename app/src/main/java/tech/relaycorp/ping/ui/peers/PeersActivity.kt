@@ -11,13 +11,11 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import dev.chrisbanes.insetter.applyInsetter
-import kotlinx.android.synthetic.main.activity_main.list
-import kotlinx.android.synthetic.main.activity_peers.*
-import kotlinx.android.synthetic.main.common_app_bar.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.common.di.ViewModelFactory
+import tech.relaycorp.ping.databinding.ActivityPeersBinding
 import tech.relaycorp.ping.domain.model.Peer
 import tech.relaycorp.ping.ui.BaseActivity
 import tech.relaycorp.ping.ui.common.getColorCompat
@@ -33,21 +31,24 @@ class PeersActivity : BaseActivity() {
         ViewModelProvider(this, viewModelFactory).get(PeersViewModel::class.java)
     }
 
+    private lateinit var binding: ActivityPeersBinding
+
     private val isPicker by lazy { intent.getBooleanExtra(EXTRA_PICKER, false) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         component.inject(this)
-        setContentView(R.layout.activity_peers)
+        binding = ActivityPeersBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         setupNavigation(
             if (isPicker) R.drawable.ic_close else R.drawable.ic_back
         )
 
-        toolbarTitle.text = getString(if (isPicker) R.string.peers_picker else R.string.peers)
+        toolbarTitle?.text = getString(if (isPicker) R.string.peers_picker else R.string.peers)
 
-        list.applyInsetter { type(navigationBars = true) { padding(bottom = true) } }
-        addPeer.applyInsetter { type(navigationBars = true) { margin(bottom = true) } }
-        list.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
+        binding.list.applyInsetter { type(navigationBars = true) { padding(bottom = true) } }
+        binding.addPeer.applyInsetter { type(navigationBars = true) { margin(bottom = true) } }
+        binding.list.addItemDecoration(DividerItemDecoration(this, RecyclerView.VERTICAL))
         setupFABMenu()
 
         viewModel
@@ -57,7 +58,7 @@ class PeersActivity : BaseActivity() {
     }
 
     private fun setupFABMenu() {
-        addPeer.addActionItem(
+        binding.addPeer.addActionItem(
             SpeedDialActionItem.Builder(PUBLIC_PEER_ITEM_ID, R.drawable.ic_public)
                 .setFabBackgroundColor(getColorFromAttr(R.attr.colorSurface))
                 .setFabImageTintColor(getColorFromAttr(R.attr.colorOnSurface))
@@ -65,7 +66,7 @@ class PeersActivity : BaseActivity() {
                 .setLabel(R.string.peer_public)
                 .create()
         )
-        addPeer.addActionItem(
+        binding.addPeer.addActionItem(
             SpeedDialActionItem.Builder(PRIVATE_PEER_ITEM_ID, R.drawable.ic_private)
                 .setFabBackgroundColor(getColorFromAttr(R.attr.colorSurface))
                 .setFabImageTintColor(getColorCompat(R.color.gray_light))
@@ -74,19 +75,19 @@ class PeersActivity : BaseActivity() {
                 .setLabel(R.string.peer_private)
                 .create()
         )
-        addPeer.setOnActionSelectedListener {
+        binding.addPeer.setOnActionSelectedListener {
             when (it.id) {
                 PUBLIC_PEER_ITEM_ID ->
                     startActivity(AddPublicPeerActivity.getIntent(this))
             }
-            addPeer.close()
+            binding.addPeer.close()
             true
         }
-        addPeer.isVisible = !isPicker
+        binding.addPeer.isVisible = !isPicker
     }
 
     private fun updateList(peers: List<Peer>) {
-        list.withModels {
+        binding.list.withModels {
             peers.forEach { peer ->
                 peerItemView {
                     id(peer.nodeId)
