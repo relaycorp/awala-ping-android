@@ -1,7 +1,4 @@
 <resources>
-    <style name="Base.Theme.Ping" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="elevationOverlayEnabled">false</item>
-    </style>
+
+    <style name="Base.Theme.Ping" parent="Theme.MaterialComponents.Light.NoActionBar" />
 </resources>
