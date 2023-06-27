@@ -1,11 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Base.Theme.Ping" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:navigationBarColor">@android:color/transparent</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="elevationOverlayEnabled">false</item>
     </style>
 
     <style name="Theme.Ping" parent="Base.Theme.Ping">
@@ -33,7 +29,8 @@
 
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:enforceStatusBarContrast" tools:targetApi="q">false</item>
-        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
         <item name="elevationOverlayEnabled">false</item>
 
         <item name="materialAlertDialogTheme">@style/ThemeOverlay.Ping.Dialog</item>
