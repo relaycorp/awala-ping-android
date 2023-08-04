@@ -78,7 +78,6 @@ class AddPublicPeerViewModel
                 }
             }
             .catch { exception ->
-                logger.log(Level.SEVERE, "Failed to save public peer", exception)
                 _errors.emit(
                     when (exception) {
                         is InvalidConnectionParams -> Error.InvalidConnectionParams
