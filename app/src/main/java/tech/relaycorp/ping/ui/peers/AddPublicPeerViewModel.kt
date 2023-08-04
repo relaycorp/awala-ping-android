@@ -2,7 +2,6 @@ package tech.relaycorp.ping.ui.peers
 
 import android.net.Uri
 import kotlinx.coroutines.flow.*
-import tech.relaycorp.ping.common.Logging.logger
 import tech.relaycorp.ping.common.PublishFlow
 import tech.relaycorp.ping.common.element
 import tech.relaycorp.ping.data.ReadFile
@@ -14,7 +13,6 @@ import tech.relaycorp.ping.ui.common.Finish
 import tech.relaycorp.ping.ui.common.clicked
 import tech.relaycorp.ping.ui.common.finish
 import java.util.*
-import java.util.logging.Level
 import javax.inject.Inject
 
 class AddPublicPeerViewModel
