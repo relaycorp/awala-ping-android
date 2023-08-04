@@ -1,6 +1,5 @@
 package tech.relaycorp.ping.ui.ping
 
-import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import tech.relaycorp.ping.ui.BaseViewModel
@@ -48,10 +47,10 @@ class SendPingViewModel
     fun sending(): Flow<Boolean> = _sending.asStateFlow()
 
     private val _errors = PublishFlow<Error>()
-    fun errors() = _errors.asFlow()
+    fun errors() = _errors.asSharedFlow()
 
     private val _finishToPing = PublishFlow<String>()
-    fun finishToPing() = _finishToPing.asFlow()
+    fun finishToPing() = _finishToPing.asSharedFlow()
 
     init {
         peerPicks
@@ -59,7 +58,7 @@ class SendPingViewModel
             .launchIn(backgroundScope)
 
         sendClicks
-            .asFlow()
+            .asSharedFlow()
             .filter { _sendEnabled.value }
             .onEach {
                 _sendEnabled.value = false
@@ -69,13 +68,13 @@ class SendPingViewModel
                     expiresAtChanges.value.toKotlinDuration()
                 )
                 _sending.value = false
-                _finishToPing.trySendBlocking(pingId)
+                _finishToPing.emit(pingId)
             }
             .catch { exp ->
                 logger.log(Level.WARNING, "Error sending ping", exp)
                 _sending.value = false
                 _sendEnabled.value = true
-                _errors.send(Error.Sending)
+                _errors.emit(Error.Sending)
             }
             .launchIn(backgroundScope)
 
