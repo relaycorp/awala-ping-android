@@ -13,13 +13,11 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.PublicThirdPartyEndpoint
-import tech.relaycorp.awaladroid.endpoint.ThirdPartyEndpoint
 import tech.relaycorp.awaladroid.messaging.OutgoingMessage
 import tech.relaycorp.awaladroid.messaging.ParcelId
 import tech.relaycorp.ping.awala.AwalaPing
 import tech.relaycorp.ping.awala.FirstPartyEndpointLoad
 import tech.relaycorp.ping.awala.OutgoingMessageBuilder
-import tech.relaycorp.ping.awala.PingSerialization
 import tech.relaycorp.ping.awala.PublicThirdPartyEndpointLoad
 import tech.relaycorp.ping.awala.SendGatewayMessage
 import tech.relaycorp.ping.data.database.dao.PingDao
@@ -27,12 +25,12 @@ import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.domain.model.Peer
 import tech.relaycorp.ping.domain.model.PeerType
 import tech.relaycorp.ping.test.PublicPeerEntityFactory
-import tech.relaycorp.relaynet.pki.CertificationPath
 import tech.relaycorp.relaynet.testing.pki.KeyPairSet
-import tech.relaycorp.relaynet.testing.pki.PDACertPath
 import tech.relaycorp.relaynet.wrappers.nodeId
+import java.nio.charset.Charset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
+import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 
 class SendPingTest {
@@ -41,7 +39,6 @@ class SendPingTest {
     private val firstPartyEndpointLoad = mock<FirstPartyEndpointLoad>()
     private val publicThirdPartyEndpointLoad = mock<PublicThirdPartyEndpointLoad>()
     private val sendGatewayMessage = mock<SendGatewayMessage>()
-    private val pingSerialization = mock<PingSerialization>()
     private val outgoingMessageBuilder = mock<OutgoingMessageBuilder>()
     private val pingDao = mock<PingDao>()
     private val subject = SendPing(
@@ -49,7 +46,6 @@ class SendPingTest {
         firstPartyEndpointLoad,
         publicThirdPartyEndpointLoad,
         sendGatewayMessage,
-        pingSerialization,
         outgoingMessageBuilder,
         pingDao
     )
@@ -59,24 +55,9 @@ class SendPingTest {
         val senderAddress = KeyPairSet.PRIVATE_ENDPOINT.public.nodeId
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(senderAddress))
         val sender = mock<FirstPartyEndpoint>()
-        val internetAddress = "frankfurt.relaycorp.cloud"
-        whenever(sender.internetAddress).thenReturn(internetAddress)
         whenever(firstPartyEndpointLoad.load(any())).thenReturn(sender)
         val recipient = mock<PublicThirdPartyEndpoint>()
-        val internetRecipientAddress = "example.org"
-        whenever(recipient.internetAddress).thenReturn(internetRecipientAddress)
         whenever(publicThirdPartyEndpointLoad.load(any())).thenReturn(recipient)
-
-        whenever(sender.issueAuthorization(any<ThirdPartyEndpoint>(), any())).thenReturn(
-            CertificationPath(
-                PDACertPath.PRIVATE_GW,
-                emptyList()
-            ).serialize()
-        )
-
-        val pingMessageSerialized = ByteArray(0)
-        whenever(pingSerialization.serialize(any(), any(), eq(internetAddress)))
-            .thenReturn(pingMessageSerialized)
 
         val outgoingMessage = mock<OutgoingMessage>()
         val parcelId = ParcelId.generate()
@@ -92,7 +73,11 @@ class SendPingTest {
 
         verify(outgoingMessageBuilder).build(
             eq(AwalaPing.V1.PingType),
-            eq(pingMessageSerialized),
+            check {
+                val pingId = it.toString(Charset.defaultCharset())
+                val uuid = UUID.fromString(pingId)
+                assertEquals(4, uuid.version())
+            },
             eq(sender),
             eq(recipient),
             check {

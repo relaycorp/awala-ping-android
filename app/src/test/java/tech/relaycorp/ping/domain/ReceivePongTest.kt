@@ -7,7 +7,6 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import tech.relaycorp.awaladroid.messaging.IncomingMessage
 import tech.relaycorp.ping.awala.AwalaPing
-import tech.relaycorp.ping.awala.PingSerialization
 import tech.relaycorp.ping.data.database.dao.PingDao
 import tech.relaycorp.ping.data.database.entity.PingWithPublicPeer
 import tech.relaycorp.ping.test.PingEntityFactory
@@ -18,18 +17,15 @@ import java.time.temporal.ChronoUnit
 class ReceivePongTest {
 
     private val pingDao = mock<PingDao>()
-    private val pingSerialization = mock<PingSerialization>()
-    private val receivePong = ReceivePong(pingDao, pingSerialization)
+    private val receivePong = ReceivePong(pingDao)
 
     @Test
     fun receiveSuccessful() = runBlockingTest {
         val message = mock<IncomingMessage>()
         whenever(message.type).thenReturn(AwalaPing.V1.PongType)
-        whenever(message.content).thenReturn(ByteArray(0))
-        whenever(message.ack).thenReturn(suspend {})
-
         val pingId = "12345"
-        whenever(pingSerialization.extractPingIdFromPong(any())).thenReturn(pingId)
+        whenever(message.content).thenReturn(pingId.toByteArray(Charsets.UTF_8))
+        whenever(message.ack).thenReturn(suspend {})
 
         val peer = PublicPeerEntityFactory.build()
         val ping = PingEntityFactory.build(peer)
