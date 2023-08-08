@@ -36,7 +36,7 @@ class PeerViewModel
     fun peer() = _peer.asStateFlow().element()
 
     private val _finish = PublishFlow<Finish>()
-    fun finish() = _finish.asFlow()
+    fun finish() = _finish.asSharedFlow()
 
     init {
         nodeIdReceived
@@ -46,7 +46,7 @@ class PeerViewModel
             .launchIn(backgroundScope)
 
         deleteClicks
-            .asFlow()
+            .asSharedFlow()
             .flatMapLatest { nodeIdReceived.element() }
             .onEach {
                 deletePeer.delete(it)

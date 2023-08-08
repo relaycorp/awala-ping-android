@@ -1,12 +1,11 @@
 package tech.relaycorp.ping.common
 
-import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import java.util.*
 import kotlin.time.Duration
 
-fun <T> PublishFlow() = BroadcastChannel<T>(1)
+fun <T> PublishFlow() = MutableSharedFlow<T>(extraBufferCapacity = 1)
 
 fun <T> Flow<Optional<T>>.element(): Flow<T> =
     flatMapLatest {

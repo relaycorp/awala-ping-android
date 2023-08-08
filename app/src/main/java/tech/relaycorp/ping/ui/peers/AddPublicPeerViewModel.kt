@@ -44,10 +44,10 @@ class AddPublicPeerViewModel
     fun connectionParamsFile(): Flow<Optional<String>> = _connectionParamsFile.asStateFlow()
 
     private val _errors = PublishFlow<Error>()
-    fun errors(): Flow<Error> = _errors.asFlow()
+    fun errors(): Flow<Error> = _errors.asSharedFlow()
 
     private val _finish = PublishFlow<Finish>()
-    fun finish(): Flow<Finish> = _finish.asFlow()
+    fun finish(): Flow<Finish> = _finish.asSharedFlow()
 
     init {
         connectionParamsFilePicks
@@ -56,7 +56,7 @@ class AddPublicPeerViewModel
             .launchIn(backgroundScope)
 
         removeConnectionParamsFileClicks
-            .asFlow()
+            .asSharedFlow()
             .onEach {
                 connectionParamsFilePicks.value = Optional.empty()
                 _connectionParamsFile.value = Optional.empty()
@@ -64,7 +64,7 @@ class AddPublicPeerViewModel
             .launchIn(backgroundScope)
 
         saveClicks
-            .asFlow()
+            .asSharedFlow()
             .flatMapLatest { connectionParamsFilePicks.take(1) }
             .map { filePick ->
                 if (filePick.isPresent) {
@@ -72,11 +72,11 @@ class AddPublicPeerViewModel
                     addPublicPeer.add(connectionParams)
                     _finish.finish()
                 } else {
-                    _errors.send(Error.MissingConnectionParams)
+                    _errors.emit(Error.MissingConnectionParams)
                 }
             }
             .catch { exception ->
-                _errors.send(
+                _errors.emit(
                     when (exception) {
                         is InvalidConnectionParams -> Error.InvalidConnectionParams
                         else -> Error.GenericSave

@@ -4,7 +4,7 @@ buildscript {
     daggerVersion = '2.45'
     epoxyVersion = '4.6.3'
     kotlinVersion = '1.8.10'
-    kotlinCoroutinesVersion = '1.6.3'
+    kotlinCoroutinesVersion = '1.7.3'
     junitVersion = '5.7.1'
     aboutLibrariesVersion = '8.9.4'
   }
