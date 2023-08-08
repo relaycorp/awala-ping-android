@@ -18,9 +18,9 @@ class BootstrapData
     suspend fun bootstrapIfNeeded() {
         if (appPreferences.firstPartyEndpointAddress().first() != null) return
 
-        importDefaultPublicPeer()
         val endpoint = firstPartyEndpointRegistration.register()
         appPreferences.setFirstPartyEndpointAddress(endpoint.nodeId)
+        importDefaultPublicPeer()
     }
 
     private suspend fun importDefaultPublicPeer() {

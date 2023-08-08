@@ -7,6 +7,7 @@ import tech.relaycorp.ping.data.database.dao.PingDao
 import tech.relaycorp.ping.data.database.entity.PingEntity
 import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.domain.model.Peer
+import java.nio.charset.Charset
 import java.time.ZonedDateTime
 import java.util.*
 import javax.inject.Inject
@@ -18,7 +19,6 @@ class SendPing
     private val firstPartyEndpointLoad: FirstPartyEndpointLoad,
     private val publicThirdPartyEndpointLoad: PublicThirdPartyEndpointLoad,
     private val sendGatewayMessage: SendGatewayMessage,
-    private val pingSerialization: PingSerialization,
     private val outgoingMessageBuilder: OutgoingMessageBuilder,
     private val pingDao: PingDao
 ) {
@@ -35,19 +35,9 @@ class SendPing
 
         val pingId = UUID.randomUUID().toString()
         val expiresAt = ZonedDateTime.now().plusSeconds(duration.inWholeSeconds)
-        val pdaPathSerialized = sender.issueAuthorization(
-            recipient,
-            ZonedDateTime.now().plusSeconds(duration.inWholeSeconds)
-        )
-        val internetAddress = sender.internetAddress
-        val pingMessageSerialized = pingSerialization.serialize(
-            pingId,
-            pdaPathSerialized,
-            internetAddress,
-        )
         val outgoingMessage = outgoingMessageBuilder.build(
             AwalaPing.V1.PingType,
-            pingMessageSerialized,
+            pingId.toByteArray(Charset.defaultCharset()),
             sender,
             recipient,
             expiresAt
