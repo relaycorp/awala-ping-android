@@ -80,6 +80,7 @@ android {
         jvmTarget = JavaVersion.VERSION_17
     }
     packagingOptions {
+        // Due to https://github.com/Kotlin/kotlinx.coroutines/issues/2023
         jniLibs {
             excludes += ['META-INF/*', 'META-INF/licenses/*']
         }
