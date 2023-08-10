@@ -73,23 +73,19 @@ android {
     compileOptions {
          coreLibraryDesugaringEnabled true
 
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8
+        jvmTarget = JavaVersion.VERSION_17
     }
     packagingOptions {
-        exclude 'META-INF/*'
-        // Due to https://github.com/Kotlin/kotlinx.coroutines/issues/2023
-        exclude 'META-INF/licenses/*'
-        exclude '**/attach_hotspot_windows.dll'
-    }
-    lintOptions {
-        checkAllWarnings true
-        warningsAsErrors true
-        abortOnError true
-        lintConfig file('lint.xml')
+        jniLibs {
+            excludes += ['META-INF/*', 'META-INF/licenses/*']
+        }
+        resources {
+            excludes += ['META-INF/*', 'META-INF/licenses/*', '**/attach_hotspot_windows.dll']
+        }
     }
     sourceSets {
         androidTest {
@@ -107,6 +103,13 @@ android {
         }
     }
     useLibrary 'android.test.mock'
+    namespace 'tech.relaycorp.ping'
+    lint {
+        abortOnError true
+        checkAllWarnings true
+        lintConfig file('lint.xml')
+        warningsAsErrors true
+    }
 }
 
 dependencies {
