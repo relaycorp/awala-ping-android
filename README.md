@@ -23,10 +23,6 @@ This app only communicates with the following:
 
 This app doesn't track usage (for example, using Google Analytics), nor does it use ads.
 
-## Development
-
-The project requires [Android Studio](https://developer.android.com/studio/) 4+.
-
 ## Contributing
 
 We love contributions! If you haven't contributed to a Relaycorp project before, please take a minute to [read our guidelines](https://github.com/relaycorp/.github/blob/master/CONTRIBUTING.md) first.
