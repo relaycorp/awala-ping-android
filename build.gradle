@@ -2,7 +2,7 @@
 buildscript {
   ext {
     daggerVersion = '2.45'
-    epoxyVersion = '4.6.3'
+    epoxyVersion = '5.1.1'
     kotlinVersion = '1.8.10'
     kotlinCoroutinesVersion = '1.7.3'
     junitVersion = '5.7.1'
