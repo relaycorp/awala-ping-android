@@ -34,7 +34,7 @@
     <string name="peer_private">Private Endpoint</string>
     <string name="peer_add">Add Endpoint</string>
     <string name="peer_delete_confirm">Are you sure you want to delete this Endpoint?</string>
-    <string name="peer_conn_params_file_label">Connection parameters *</string>
+    <string name="peer_conn_params_file_label">Connection parameters\u00A0*</string>
     <string name="peer_conn_params_file_button">Select file</string>
     <string name="peer_conn_params_file_picked">Connection parameters file picked</string>
     <string name="peer_add_error">Error saving new peer</string>
