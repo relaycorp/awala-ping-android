@@ -2,17 +2,10 @@ package tech.relaycorp.ping
 
 import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ProcessLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import tech.relaycorp.awaladroid.Awala
-import tech.relaycorp.awaladroid.GatewayBindingException
 import tech.relaycorp.awaladroid.GatewayClient
 import tech.relaycorp.ping.common.Logging.logger
 import tech.relaycorp.ping.common.di.AppComponent
@@ -25,7 +18,7 @@ import javax.inject.Inject
 
 open class App : Application() {
 
-    private val lifecycleScope by lazy { ProcessLifecycleOwner.get().lifecycleScope }
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     open val component: AppComponent =
         DaggerAppComponent.builder()
@@ -42,7 +35,7 @@ open class App : Application() {
         super.onCreate()
         component.inject(this)
 
-        lifecycleScope.launch {
+        coroutineScope.launch {
             Awala.setUp(this@App)
             bindToGateway()
             GatewayClient.receiveMessages().collect(receivePong::receive)
@@ -52,7 +45,7 @@ open class App : Application() {
     protected open fun bindToGateway() {
         GatewayClient.bindAutomatically(
             onBindSuccessful = {
-                lifecycleScope.launch { bootstrapData.bootstrapIfNeeded() }
+                coroutineScope.launch { bootstrapData.bootstrapIfNeeded() }
             },
             onBindFailure = {
                 logger.log(Level.WARNING, "Gateway binding exception", it)

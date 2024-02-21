@@ -5,7 +5,6 @@ import com.adevinta.android.barista.assertion.BaristaVisibilityAssertions.assert
 import com.adevinta.android.barista.interaction.BaristaClickInteractions.clickOn
 import com.adevinta.android.barista.rule.flaky.AllowFlaky
 import com.adevinta.android.barista.rule.flaky.FlakyTestRule
-import com.adevinta.android.barista.rule.flaky.Repeat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
@@ -15,10 +14,8 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
-import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.data.database.dao.PublicPeerDao
-import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.domain.BootstrapData
 import tech.relaycorp.ping.test.AppTestProvider.component
 import tech.relaycorp.ping.test.AppTestProvider.context
