@@ -1,14 +1,13 @@
 package tech.relaycorp.ping.domain
 
-import kotlinx.coroutines.flow.first
+import tech.relaycorp.awaladroid.endpoint.FirstPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.InvalidThirdPartyEndpoint
 import tech.relaycorp.awaladroid.endpoint.PublicThirdPartyEndpoint
-import tech.relaycorp.ping.awala.FirstPartyEndpointLoad
+import tech.relaycorp.awaladroid.endpoint.UnknownFirstPartyEndpointException
 import tech.relaycorp.ping.awala.OutgoingMessageBuilder
 import tech.relaycorp.ping.awala.SendGatewayMessage
 import tech.relaycorp.ping.data.database.dao.PublicPeerDao
 import tech.relaycorp.ping.data.database.entity.PublicPeerEntity
-import tech.relaycorp.ping.data.preference.AppPreferences
 import java.time.ZonedDateTime
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.days
@@ -16,22 +15,26 @@ import kotlin.time.toJavaDuration
 
 class AddPublicPeer
 @Inject constructor(
-    private val appPreferences: AppPreferences,
     private val publicPeerDao: PublicPeerDao,
     private val sendGatewayMessage: SendGatewayMessage,
-    private val firstPartyEndpointLoad: FirstPartyEndpointLoad,
+    private val getFirstPartyEndpoint: GetFirstPartyEndpoint,
     private val outgoingMessageBuilder: OutgoingMessageBuilder,
 ) {
 
     @Throws(InvalidConnectionParams::class)
     suspend fun add(connectionParams: ByteArray): PublicThirdPartyEndpoint {
+        val sender = getFirstPartyEndpoint()
+            ?: throw InvalidConnectionParams(
+                UnknownFirstPartyEndpointException("Sender not available")
+            )
+
         val endpoint = try {
-            PublicThirdPartyEndpoint.import(connectionParams)
+            PublicThirdPartyEndpoint.import(connectionParams, sender)
         } catch (e: InvalidThirdPartyEndpoint) {
             throw InvalidConnectionParams(e)
         }
 
-        sendAuthorisation(endpoint)
+        sendAuthorisation(sender, endpoint)
 
         publicPeerDao.save(
             PublicPeerEntity(
@@ -42,13 +45,10 @@ class AddPublicPeer
         return endpoint
     }
 
-    private suspend fun sendAuthorisation(grantee: PublicThirdPartyEndpoint) {
-        val senderAddress = appPreferences.firstPartyEndpointAddress().first()
-            ?: throw SendPingException("Sender not set")
-        val sender = firstPartyEndpointLoad.load(senderAddress)
-            ?: throw InvalidConnectionParams(
-                InvalidThirdPartyEndpoint("Sender not registered")
-            )
+    private suspend fun sendAuthorisation(
+        sender: FirstPartyEndpoint,
+        grantee: PublicThirdPartyEndpoint
+    ) {
         val authSerialized = sender.authorizeIndefinitely(grantee)
         val outgoingAuth = outgoingMessageBuilder.build(
             AUTH_CONTENT_TYPE,

@@ -2,11 +2,15 @@ package tech.relaycorp.ping
 
 import android.app.Application
 import android.content.Intent
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ProcessLifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import tech.relaycorp.awaladroid.Awala
 import tech.relaycorp.awaladroid.GatewayBindingException
 import tech.relaycorp.awaladroid.GatewayClient
@@ -21,7 +25,7 @@ import javax.inject.Inject
 
 open class App : Application() {
 
-    val coroutineContext = Dispatchers.Default + SupervisorJob()
+    private val lifecycleScope by lazy { ProcessLifecycleOwner.get().lifecycleScope }
 
     open val component: AppComponent =
         DaggerAppComponent.builder()
@@ -38,21 +42,23 @@ open class App : Application() {
         super.onCreate()
         component.inject(this)
 
-        CoroutineScope(coroutineContext).launch {
-            setupAwala()
+        lifecycleScope.launch {
+            Awala.setUp(this@App)
+            bindToGateway()
+            GatewayClient.receiveMessages().collect(receivePong::receive)
         }
     }
 
-    protected open suspend fun setupAwala() {
-        Awala.setUp(this)
-        try {
-            GatewayClient.bind()
-            bootstrapData.bootstrapIfNeeded()
-            GatewayClient.receiveMessages().collect(receivePong::receive)
-        } catch (exp: GatewayBindingException) {
-            logger.log(Level.WARNING, "Gateway binding exception", exp)
-            openNoGateway()
-        }
+    protected open fun bindToGateway() {
+        GatewayClient.bindAutomatically(
+            onBindSuccessful = {
+                lifecycleScope.launch { bootstrapData.bootstrapIfNeeded() }
+            },
+            onBindFailure = {
+                logger.log(Level.WARNING, "Gateway binding exception", it)
+                openNoGateway()
+            }
+        )
     }
 
     private fun openNoGateway() {
@@ -60,8 +66,8 @@ open class App : Application() {
             NoGatewayActivity.getIntent(this)
                 .addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                            Intent.FLAG_ACTIVITY_NEW_TASK
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                        Intent.FLAG_ACTIVITY_NEW_TASK
                 )
         )
     }
