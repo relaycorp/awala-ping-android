@@ -10,13 +10,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertTrue
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.RuleChain
 import org.junit.runner.RunWith
 import tech.relaycorp.ping.R
 import tech.relaycorp.ping.data.database.dao.PublicPeerDao
-import tech.relaycorp.ping.domain.BootstrapData
+import tech.relaycorp.ping.data.preference.AppPreferences
 import tech.relaycorp.ping.test.AppTestProvider.component
 import tech.relaycorp.ping.test.AppTestProvider.context
 import tech.relaycorp.ping.test.BaseActivityTestRule
@@ -40,8 +41,9 @@ class PeerActivityTest {
 
     @Inject
     lateinit var publicPeerDao: PublicPeerDao
+
     @Inject
-    lateinit var bootstrapData: BootstrapData
+    lateinit var appPreferences: AppPreferences
 
     @Before
     fun setUp() {
@@ -63,8 +65,13 @@ class PeerActivityTest {
 
     @Test
     @AllowFlaky(attempts = 3)
+    @Ignore(
+        """
+        This test needs a first-party endpoint registered,
+        which we can't simulate in test devices without the Gateway app
+        """
+    )
     fun deletes() = runTest {
-        bootstrapData.bootstrapIfNeeded()
         val peer = PublicPeerEntityFactory.build()
         runBlocking {
             publicPeerDao.save(peer)
