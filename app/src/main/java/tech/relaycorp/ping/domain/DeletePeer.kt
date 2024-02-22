@@ -7,12 +7,14 @@ import javax.inject.Inject
 
 class DeletePeer
 @Inject constructor(
-    private val publicPeerDao: PublicPeerDao
+    private val publicPeerDao: PublicPeerDao,
+    private val getFirstPartyEndpoint: GetFirstPartyEndpoint
 ) {
 
     suspend fun delete(nodeId: String) {
         val entity = publicPeerDao.get(nodeId).first() ?: return
-        PublicThirdPartyEndpoint.load(entity.nodeId)?.delete()
+        val firstParty = getFirstPartyEndpoint() ?: return
+        PublicThirdPartyEndpoint.load(entity.nodeId)?.delete(firstParty)
         publicPeerDao.delete(entity)
     }
 }

@@ -4,11 +4,8 @@ import android.app.Application
 import android.content.Intent
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import tech.relaycorp.awaladroid.Awala
-import tech.relaycorp.awaladroid.GatewayBindingException
 import tech.relaycorp.awaladroid.GatewayClient
 import tech.relaycorp.ping.common.Logging.logger
 import tech.relaycorp.ping.common.di.AppComponent
@@ -21,7 +18,7 @@ import javax.inject.Inject
 
 open class App : Application() {
 
-    val coroutineContext = Dispatchers.Default + SupervisorJob()
+    private val coroutineScope = CoroutineScope(Dispatchers.Main)
 
     open val component: AppComponent =
         DaggerAppComponent.builder()
@@ -38,21 +35,23 @@ open class App : Application() {
         super.onCreate()
         component.inject(this)
 
-        CoroutineScope(coroutineContext).launch {
-            setupAwala()
+        coroutineScope.launch {
+            Awala.setUp(this@App)
+            bindToGateway()
+            GatewayClient.receiveMessages().collect(receivePong::receive)
         }
     }
 
-    protected open suspend fun setupAwala() {
-        Awala.setUp(this)
-        try {
-            GatewayClient.bind()
-            bootstrapData.bootstrapIfNeeded()
-            GatewayClient.receiveMessages().collect(receivePong::receive)
-        } catch (exp: GatewayBindingException) {
-            logger.log(Level.WARNING, "Gateway binding exception", exp)
-            openNoGateway()
-        }
+    protected open fun bindToGateway() {
+        GatewayClient.bindAutomatically(
+            onBindSuccessful = {
+                coroutineScope.launch { bootstrapData.bootstrapIfNeeded() }
+            },
+            onBindFailure = {
+                logger.log(Level.WARNING, "Gateway binding exception", it)
+                openNoGateway()
+            }
+        )
     }
 
     private fun openNoGateway() {
@@ -60,8 +59,8 @@ open class App : Application() {
             NoGatewayActivity.getIntent(this)
                 .addFlags(
                     Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                            Intent.FLAG_ACTIVITY_CLEAR_TASK or
-                            Intent.FLAG_ACTIVITY_NEW_TASK
+                        Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                        Intent.FLAG_ACTIVITY_NEW_TASK
                 )
         )
     }

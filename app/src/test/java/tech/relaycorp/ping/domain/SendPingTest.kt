@@ -8,6 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -36,14 +37,14 @@ import kotlin.time.Duration.Companion.minutes
 class SendPingTest {
 
     private val appPreferences = mock<AppPreferences>()
-    private val firstPartyEndpointLoad = mock<FirstPartyEndpointLoad>()
+    private val getFirstPartyEndpoint = mock<GetFirstPartyEndpoint>()
     private val publicThirdPartyEndpointLoad = mock<PublicThirdPartyEndpointLoad>()
     private val sendGatewayMessage = mock<SendGatewayMessage>()
     private val outgoingMessageBuilder = mock<OutgoingMessageBuilder>()
     private val pingDao = mock<PingDao>()
     private val subject = SendPing(
         appPreferences,
-        firstPartyEndpointLoad,
+        getFirstPartyEndpoint,
         publicThirdPartyEndpointLoad,
         sendGatewayMessage,
         outgoingMessageBuilder,
@@ -51,11 +52,11 @@ class SendPingTest {
     )
 
     @Test
-    fun sendSuccessful() = runBlockingTest {
+    fun sendSuccessful() = runTest {
         val senderAddress = KeyPairSet.PRIVATE_ENDPOINT.public.nodeId
         whenever(appPreferences.firstPartyEndpointAddress()).thenReturn(flowOf(senderAddress))
         val sender = mock<FirstPartyEndpoint>()
-        whenever(firstPartyEndpointLoad.load(any())).thenReturn(sender)
+        whenever(getFirstPartyEndpoint()).thenReturn(sender)
         val recipient = mock<PublicThirdPartyEndpoint>()
         whenever(publicThirdPartyEndpointLoad.load(any())).thenReturn(recipient)
 

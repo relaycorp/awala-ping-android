@@ -16,7 +16,7 @@ import kotlin.time.Duration
 class SendPing
 @Inject constructor(
     private val appPreferences: AppPreferences,
-    private val firstPartyEndpointLoad: FirstPartyEndpointLoad,
+    private val getFirstPartyEndpoint: GetFirstPartyEndpoint,
     private val publicThirdPartyEndpointLoad: PublicThirdPartyEndpointLoad,
     private val sendGatewayMessage: SendGatewayMessage,
     private val outgoingMessageBuilder: OutgoingMessageBuilder,
@@ -25,10 +25,8 @@ class SendPing
 
     @Throws(SendPingException::class)
     suspend fun send(peer: Peer, duration: Duration): String {
-        val senderAddress = appPreferences.firstPartyEndpointAddress().first()
-            ?: throw SendPingException("Sender not set")
-        val sender = firstPartyEndpointLoad.load(senderAddress)
-            ?: throw SendPingException("Sender not registered")
+        val sender = getFirstPartyEndpoint()
+            ?: throw SendPingException("Sender not available")
 
         val recipient = publicThirdPartyEndpointLoad.load(peer.nodeId)
             ?: throw SendPingException("Recipient not imported")
